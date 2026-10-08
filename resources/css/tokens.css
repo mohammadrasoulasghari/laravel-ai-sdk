@@ -1,0 +1,60 @@
+/*
+| Design tokens — the ONLY place colors, radii and shadows are defined.
+| Components use the semantic Tailwind names (bg-surface, text-fg-muted, border-border,
+| bg-primary, ...) generated from these variables in app.css, never raw palette colors.
+| Dark mode overrides the same variables under `.dark`.
+*/
+:root {
+    --color-bg: oklch(0.985 0.002 247);
+    --color-surface: oklch(1 0 0);
+    --color-surface-muted: oklch(0.967 0.003 265);
+    --color-fg: oklch(0.21 0.034 265);
+    --color-fg-muted: oklch(0.446 0.03 257);
+    --color-border: oklch(0.912 0.009 265);
+    --color-ring: oklch(0.546 0.215 263);
+
+    --color-primary: oklch(0.488 0.217 264);
+    --color-primary-hover: oklch(0.424 0.199 266);
+    --color-primary-fg: oklch(0.985 0 0);
+
+    --color-danger: oklch(0.505 0.213 27.5);
+    --color-danger-hover: oklch(0.444 0.177 26.9);
+    --color-danger-fg: oklch(0.985 0 0);
+    --color-danger-soft: oklch(0.971 0.013 17.4);
+
+    --color-success: oklch(0.527 0.154 150);
+    --color-success-soft: oklch(0.962 0.044 156.7);
+    --color-warning: oklch(0.555 0.163 48.9);
+    --color-warning-soft: oklch(0.973 0.071 103.2);
+    --color-info: oklch(0.5 0.134 242.7);
+    --color-info-soft: oklch(0.951 0.026 236.8);
+
+    --radius-control: 0.5rem;
+    --radius-card: 0.75rem;
+}
+
+.dark {
+    --color-bg: oklch(0.145 0.02 265);
+    --color-surface: oklch(0.205 0.025 265);
+    --color-surface-muted: oklch(0.255 0.027 265);
+    --color-fg: oklch(0.967 0.003 265);
+    --color-fg-muted: oklch(0.75 0.02 260);
+    --color-border: oklch(0.32 0.03 265);
+    --color-ring: oklch(0.707 0.165 254.6);
+
+    --color-primary: oklch(0.623 0.188 259.8);
+    --color-primary-hover: oklch(0.707 0.165 254.6);
+    --color-primary-fg: oklch(0.145 0.02 265);
+
+    --color-danger: oklch(0.637 0.208 25.3);
+    --color-danger-hover: oklch(0.704 0.191 22.2);
+    --color-danger-fg: oklch(0.145 0.02 265);
+    --color-danger-soft: oklch(0.3 0.08 25);
+
+    --color-success: oklch(0.723 0.192 149.6);
+    --color-success-soft: oklch(0.3 0.06 150);
+    --color-warning: oklch(0.795 0.162 86);
+    --color-warning-soft: oklch(0.3 0.06 80);
+    --color-info: oklch(0.746 0.16 232.7);
+    --color-info-soft: oklch(0.3 0.05 240);
+}

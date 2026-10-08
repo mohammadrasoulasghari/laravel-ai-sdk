@@ -1,10 +1,54 @@
 @import 'tailwindcss';
+@import 'vazirmatn/Vazirmatn-Variable-font-face.css';
+@import './tokens.css';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+@source '../views';
+@source '../../app/Modules/*/resources/views';
+@source '../../app/Shared/View';
 
-@theme {
-    --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Class-based dark mode, toggled by the theme store (resources/js/theme.js). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+    --font-sans: 'Vazirmatn', ui-sans-serif, system-ui, sans-serif;
+
+    --color-bg: var(--color-bg);
+    --color-surface: var(--color-surface);
+    --color-surface-muted: var(--color-surface-muted);
+    --color-fg: var(--color-fg);
+    --color-fg-muted: var(--color-fg-muted);
+    --color-border: var(--color-border);
+    --color-ring: var(--color-ring);
+    --color-primary: var(--color-primary);
+    --color-primary-hover: var(--color-primary-hover);
+    --color-primary-fg: var(--color-primary-fg);
+    --color-danger: var(--color-danger);
+    --color-danger-hover: var(--color-danger-hover);
+    --color-danger-fg: var(--color-danger-fg);
+    --color-danger-soft: var(--color-danger-soft);
+    --color-success: var(--color-success);
+    --color-success-soft: var(--color-success-soft);
+    --color-warning: var(--color-warning);
+    --color-warning-soft: var(--color-warning-soft);
+    --color-info: var(--color-info);
+    --color-info-soft: var(--color-info-soft);
+
+    --radius-control: var(--radius-control);
+    --radius-card: var(--radius-card);
+}
+
+@layer base {
+    html {
+        @apply bg-bg text-fg antialiased;
+        font-feature-settings: 'ss01';
+    }
+
+    /* Visible focus for keyboard users on every interactive element (a11y). */
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-ring;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Providers\AppServiceProvider;
 use App\Providers\HorizonServiceProvider;
+use App\Shared\Providers\SharedServiceProvider;
 
 /*
 | Application and module service providers. Module providers are appended by
@@ -12,4 +13,5 @@ use App\Providers\HorizonServiceProvider;
 return [
     AppServiceProvider::class,
     HorizonServiceProvider::class,
+    SharedServiceProvider::class,
 ];

@@ -36,8 +36,8 @@ it('has no hard-coded user-facing text (use __())', function (string $path, stri
     $text = preg_replace('/<(script|style)\b[^>]*>.*?<\/\1>/is', '', $text) ?? '';
     $text = preg_replace('/\{\{.*?\}\}|\{!!.*?!!\}/s', '', $text) ?? '';
     $text = preg_replace('/@(?:php|verbatim)\b.*?@end(?:php|verbatim)/s', '', $text) ?? '';
-    $text = preg_replace('/@\w+(?:\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))?/', '', $text) ?? '';
-    $text = preg_replace('/<[^>]*>/s', ' ', $text) ?? '';
+    $text = preg_replace('/@\w+\s*(\((?:[^()]++|(?1))*\))?/', '', $text) ?? '';
+    $text = preg_replace('/<(?:[^>"\']++|"[^"]*"|\'[^\']*\')*>/s', ' ', $text) ?? '';
 
     preg_match_all('/[\p{L}][\p{L}\p{M}\'’ ]{1,}/u', $text, $matches);
     $words = array_values(array_filter(array_map(trim(...), $matches[0]), static fn (string $w): bool => $w !== ''));

@@ -41,10 +41,10 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [x] Arch tests enforcing boundaries
 
 ### 5. Frontend foundation
-- [ ] Tailwind tokens, dark mode, Vazirmatn, RTL/LTR
-- [ ] UI kit components + layouts (app, guest, admin)
-- [ ] Style Guide page (local only)
-- [ ] Error pages 403/404/419/429/500/503
+- [x] Tailwind tokens, dark mode, Vazirmatn, RTL/LTR
+- [x] UI kit components + layouts (app, guest, admin)
+- [x] Style Guide page (local only)
+- [x] Error pages 403/404/419/429/500/503
 
 ### 6. Core modules
 - [ ] Auth (login, register, password reset, email verification)
