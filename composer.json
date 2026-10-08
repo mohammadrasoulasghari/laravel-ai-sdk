@@ -52,8 +52,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
-        }
+            "Tests\\": "tests/",
+            "Tools\\PHPStan\\": "tools/phpstan/src/"
+        },
+        "files": [
+            "tests/Support/helpers.php"
+        ]
     },
     "scripts": {
         "setup": [
@@ -99,7 +103,7 @@
             "phpstan analyse --no-progress --memory-limit=1G"
         ],
         "test:types": [
-            "pest --type-coverage --min=100 --compact"
+            "@php -d memory_limit=1G vendor/bin/pest --type-coverage --min=100 --compact"
         ],
         "test:coverage": [
             "pest --coverage --min=80 --compact"
@@ -121,7 +125,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {

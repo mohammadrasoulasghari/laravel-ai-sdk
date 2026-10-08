@@ -11,7 +11,11 @@ parameters:
         - database/factories
         - database/seeders
         - routes
+        - tools/phpstan/src
     tmpDir: storage/framework/cache/phpstan
     checkMissingCallableSignature: true
     checkUninitializedProperties: true
     reportUnmatchedIgnoredErrors: true
+
+rules:
+    - Tools\PHPStan\NoEloquentInControllersRule

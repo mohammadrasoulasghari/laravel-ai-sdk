@@ -2,8 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Providers\AppServiceProvider;
+use App\Providers\HorizonServiceProvider;
+
+/*
+| Application and module service providers. Module providers are appended by
+| `php artisan make:module` — keep one per line, alphabetical after the app ones.
+*/
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    App\Providers\TelescopeServiceProvider::class,
+    AppServiceProvider::class,
+    HorizonServiceProvider::class,
 ];

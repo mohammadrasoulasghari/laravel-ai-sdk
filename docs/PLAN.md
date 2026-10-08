@@ -21,24 +21,24 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [x] Initial ADRs (0001–0012)
 
 ### 2. Foundation
-- [ ] Sail / docker-compose (app, MySQL, Redis, Mailpit)
-- [ ] `.env.example` fully commented; MySQL + Redis defaults
-- [ ] Composer scripts (`lint`, `analyse`, `test`, `fix`, `check`) + Makefile
+- [x] Sail / docker-compose (app, MySQL, Redis, Mailpit)
+- [x] `.env.example` fully commented; MySQL + Redis defaults
+- [x] Composer scripts (`lint`, `analyse`, `test`, `fix`, `check`) + Makefile
 
 ### 3. Quality tooling
-- [ ] Pest 4 + arch + type-coverage + laravel plugins
-- [ ] Larastan level max
-- [ ] Pint strict preset
-- [ ] Rector (PHP 8.3 + Laravel sets)
-- [ ] Prettier (+ blade, tailwind plugins)
-- [ ] CaptainHook (pre-commit, commit-msg)
-- [ ] GitHub Actions CI (check + audits, MySQL service)
+- [x] Pest 4 + arch + type-coverage + laravel plugins
+- [x] Larastan level max
+- [x] Pint strict preset
+- [x] Rector (PHP 8.3 + Laravel sets)
+- [x] Prettier (+ blade, tailwind plugins)
+- [x] CaptainHook (pre-commit, commit-msg)
+- [x] GitHub Actions CI (check + audits, MySQL service)
 
 ### 4. Architecture skeleton
-- [ ] `app/Modules` loader (`ModuleServiceProvider` base)
-- [ ] `app/Shared` base classes (Action contract, Data, ValueObject, DomainException)
-- [ ] Strict model mode, exception handling, RFC 9457 problem details
-- [ ] Arch tests enforcing boundaries
+- [x] `app/Modules` loader (`ModuleServiceProvider` base)
+- [x] `app/Shared` base classes (Action contract, Data, ValueObject, DomainException)
+- [x] Strict model mode, exception handling, RFC 9457 problem details
+- [x] Arch tests enforcing boundaries
 
 ### 5. Frontend foundation
 - [ ] Tailwind tokens, dark mode, Vazirmatn, RTL/LTR
