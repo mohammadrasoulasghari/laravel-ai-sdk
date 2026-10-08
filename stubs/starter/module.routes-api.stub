@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Route;
+
+// Prefixed /api/v1, named api.v1.* — see app/Modules/Blog/routes/api.php.
+Route::prefix('{{ kebab }}')->name('{{ kebab }}.')->group(function (): void {
+    //
+});

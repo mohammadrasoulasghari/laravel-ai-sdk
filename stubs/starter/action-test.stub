@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Modules\{{ module }}\Actions\{{ class }};
+use App\Modules\{{ module }}\Data\{{ data }};
+
+it('{{ sentence }}', function (): void {
+    $action = resolve({{ class }}::class);
+
+    $action->handle(new {{ data }}());
+
+    expect(true)->toBeTrue(); // TODO: assert the state change / event / return value
+})->todo();

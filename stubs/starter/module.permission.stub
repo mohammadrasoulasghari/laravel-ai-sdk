@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\{{ module }}\Enums;
+
+enum {{ module }}Permission: string
+{
+    case Manage = '{{ kebab }}.manage';
+}

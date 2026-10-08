@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\{{ module }}\Providers;
+
+use App\Modules\{{ module }}\Enums\{{ module }}Permission;
+use App\Modules\Roles\Enums\Role;
+use App\Shared\Auth\PermissionRegistry;
+use App\Shared\Providers\ModuleServiceProvider;
+
+/**
+ * {{ module }} module. Conventional folders (routes, views, lang, migrations) are wired
+ * by ModuleServiceProvider. Declare $bindings, $policies and $listen here.
+ */
+final class {{ module }}ServiceProvider extends ModuleServiceProvider
+{
+    /** @var array<class-string, class-string> */
+    protected array $policies = [];
+
+    /** @var array<class-string, list<class-string>> */
+    protected array $listen = [];
+
+    protected function bootModule(): void
+    {
+        $this->app->make(PermissionRegistry::class)->register({{ module }}Permission::cases(), [Role::Admin->value]);
+    }
+}

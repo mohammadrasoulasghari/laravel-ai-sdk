@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Modules\{{ module }}\ValueObjects\{{ class }};
+
+it('accepts a valid value', function (): void {
+    expect((string) new {{ class }}('example'))->toBe('example');
+});
+
+it('rejects an empty value', function (): void {
+    new {{ class }}('');
+})->throws(InvalidArgumentException::class);
+
+it('compares by value', function (): void {
+    expect((new {{ class }}('a'))->equals(new {{ class }}('a')))->toBeTrue()
+        ->and((new {{ class }}('a'))->equals(new {{ class }}('b')))->toBeFalse();
+});
