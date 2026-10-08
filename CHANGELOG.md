@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-10-08
 
+### Security
+- Final audit (code review + security audit) findings closed before release: super-admin escalation, token expiry, production admin seeding, trusted proxies, secure cookies, Markdown link injection in mail, generator/`starter:init` input validation, `Retry-After` on problem+json, hardened Claude Code hooks and permissions. See `docs/FINAL_REPORT.md`.
+
 ### Added
 
 #### Foundation

@@ -75,5 +75,5 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [x] Fresh subagent builds Contact module via /feature; fix docs; delete module
 
 ### 13. Final audit
-- [ ] code-reviewer + security-auditor over whole codebase; fix findings
-- [ ] docs/FINAL_REPORT.md (Persian)
+- [x] code-reviewer + security-auditor over whole codebase; fix findings
+- [x] docs/FINAL_REPORT.md (Persian)
