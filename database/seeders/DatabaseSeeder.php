@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Modules\Blog\Database\Seeders\BlogSeeder;
 use App\Modules\Roles\Database\Seeders\RolesSeeder;
 use App\Modules\Users\Database\Seeders\UsersSeeder;
 use Illuminate\Database\Seeder;
@@ -19,6 +20,7 @@ final class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UsersSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

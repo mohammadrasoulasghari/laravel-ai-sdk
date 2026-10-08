@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Modules\Admin\Providers\AdminServiceProvider;
 use App\Modules\Auth\Providers\AuthServiceProvider;
+use App\Modules\Blog\Providers\BlogServiceProvider;
 use App\Modules\Roles\Providers\RolesServiceProvider;
 use App\Modules\Settings\Providers\SettingsServiceProvider;
 use App\Modules\Users\Providers\UsersServiceProvider;
@@ -23,6 +24,7 @@ return [
     // modules
     AdminServiceProvider::class,
     AuthServiceProvider::class,
+    BlogServiceProvider::class,
     RolesServiceProvider::class,
     SettingsServiceProvider::class,
     UsersServiceProvider::class,

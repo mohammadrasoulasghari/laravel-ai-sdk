@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'nav' => 'Blog',
+    'admin_nav' => 'Posts',
+    'title' => 'Blog',
+    'admin_title' => 'Posts',
+    'new' => 'New post',
+    'create_title' => 'New post',
+    'edit_title' => 'Edit post',
+    'all_categories' => 'All',
+    'by_author' => 'By :name',
+    'read_more' => 'Read more',
+    'back_to_blog' => 'Back to blog',
+    'search_placeholder' => 'Search posts',
+    'empty' => 'No posts yet.',
+    'publish' => 'Publish',
+    'unpublish' => 'Unpublish',
+    'view_public' => 'View on site',
+    'delete_confirm' => 'Delete “:title”? This cannot be undone.',
+    'fields' => [
+        'title' => 'Title',
+        'slug' => 'Slug',
+        'slug_hint' => 'Leave empty to generate it from the title.',
+        'excerpt' => 'Excerpt',
+        'body' => 'Body',
+        'body_hint' => 'Markdown is supported. Raw HTML is removed.',
+        'category' => 'Category',
+        'status' => 'Status',
+        'published_at' => 'Published',
+        'author' => 'Author',
+    ],
+    'status' => [
+        'draft' => 'Draft',
+        'published' => 'Published',
+    ],
+    'created' => 'Draft created.',
+    'updated' => 'Post saved.',
+    'deleted' => 'Post deleted.',
+    'published' => 'Post published.',
+    'unpublished' => 'Post moved back to draft.',
+    'errors' => [
+        'already_published' => 'This post is already published.',
+        'not_published' => 'This post is not published.',
+    ],
+    'mail' => [
+        'published_subject' => 'Your post “:title” is live',
+        'published_line' => '“:title” has been published.',
+        'view_post' => 'View post',
+    ],
+];

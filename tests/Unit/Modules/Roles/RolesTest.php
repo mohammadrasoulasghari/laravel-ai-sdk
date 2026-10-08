@@ -30,7 +30,7 @@ it('describes the super-admin immutable exception', function (): void {
 });
 
 it('registers module permissions with admin as the default role', function (): void {
-    expect(resolve(PermissionRegistry::class)->all())->toBe([
+    expect(resolve(PermissionRegistry::class)->all())->toMatchArray([
         SystemAbility::AccessAdmin->value => ['admin'],
         RolePermission::Manage->value => ['admin'],
         'settings.manage' => ['admin'],

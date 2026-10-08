@@ -33,7 +33,10 @@ it('registers admin sections in order', function (): void {
         ->values()
         ->all();
 
-    expect($routes)->toBe(['admin.dashboard', 'admin.users.index', 'admin.roles.index', 'admin.settings.edit']);
+    expect($routes[0])->toBe('admin.dashboard')
+        ->and($routes)->toContain('admin.users.index', 'admin.roles.index', 'admin.settings.edit')
+        ->and(array_search('admin.users.index', $routes, true))->toBeLessThan(array_search('admin.roles.index', $routes, true))
+        ->and(end($routes))->toBe('admin.settings.edit');
 });
 
 it('shows guests no admin navigation', function (): void {

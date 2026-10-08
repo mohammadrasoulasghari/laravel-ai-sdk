@@ -39,13 +39,14 @@ it('is idempotent', function (): void {
 
 it('creates every built-in role and registered permission', function (): void {
     expect(Role::query()->orderBy('name')->pluck('name')->all())->toBe(['admin', 'member', 'super-admin'])
-        ->and(Permission::query()->orderBy('name')->pluck('name')->all())->toBe([
+        ->and(Permission::query()->orderBy('name')->pluck('name')->all())->toBe(array_keys(resolve(PermissionRegistry::class)->all()))
+        ->and(Permission::query()->pluck('name')->all())->toContain(
             SystemAbility::AccessAdmin->value,
             RolePermission::Manage->value,
             SettingPermission::Manage->value,
             SystemAbility::ViewSystemTools->value,
             UserPermission::Manage->value,
-        ]);
+        );
 });
 
 it('grants default permissions to admins only', function (): void {
@@ -72,7 +73,7 @@ it('restores deleted defaults', function (): void {
 
     $admin = Role::findByName(RoleName::Admin->value);
 
-    expect($count)->toBe(5)
+    expect($count)->toBe(count(resolve(PermissionRegistry::class)->all()))
         ->and($admin->hasPermissionTo(UserPermission::Manage->value))->toBeTrue()
         ->and($admin->hasPermissionTo(SettingPermission::Manage->value))->toBeTrue();
 });
