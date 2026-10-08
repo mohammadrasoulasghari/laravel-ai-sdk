@@ -9,7 +9,7 @@ Code, comments, commits and technical docs are in **English**.
 
 ## Architecture in 30 seconds
 
-- `app/Modules/<Name>/` — one business domain per module: `Actions/ Data/ Enums/ Events/ Exceptions/ Http/{Controllers,Requests,Resources}/ Jobs/ Listeners/ Models/ Policies/ Providers/ Queries/ ValueObjects/ Database/{Migrations,Factories,Seeders}/ resources/views/ lang/{en,fa}/ routes/{web,api}.php`.
+- `app/Modules/<Name>/` — one business domain per module: `Actions/ Data/ Enums/ Events/ Exceptions/ Http/{Controllers,Requests,Resources}/ Jobs/ Listeners/ Models/ Notifications/ Policies/ Providers/ Queries/ ValueObjects/ Database/{Migrations,Factories,Seeders}/ resources/views/ lang/{en,fa}/ routes/{web,api}.php`.
 - `app/Shared/` — cross-cutting: `ModuleServiceProvider` base, `DomainException`, RFC 9457 problem details, middleware, navigation & permission registries, localization, date formatting.
 - Flow: **FormRequest** (validate + authorize + `toData()`) → **thin Controller** → **Action** (writes) / **Query** (reads) → Blade view (UI kit) or API Resource.
 - Modules talk only through another module's `Contracts/ Data/ Enums/ Events/` (+ `Users\Models\User`).
@@ -61,6 +61,7 @@ Seeded login: `admin@example.com` / `password` (super-admin).
 - Put logic in controllers, models or views; use Facades in Actions/Data/Models/Queries/ValueObjects/Events/Enums.
 - Import another module's `Actions/Models/Queries/Http/...` (arch test `ModuleBoundariesTest`).
 - Use `dd`, `dump`, `ray`, `var_dump`, physical Tailwind direction classes, or raw palette colors.
+- Use PHP 8.4+ syntax — the floor is **8.3**: no property hooks, no asymmetric visibility, write `(new Foo())->bar()` (not `new Foo()->bar()`).
 - Install packages without the `researcher` agent checking versions, or commit secrets.
 
 ## How to work here (agents)

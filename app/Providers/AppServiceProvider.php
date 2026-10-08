@@ -60,7 +60,7 @@ final class AppServiceProvider extends ServiceProvider
             $id = $request->user()?->getAuthIdentifier();
             $key = is_string($id) ? 'user:'.$id : 'ip:'.$request->ip();
 
-            return Limit::perMinute(60)->by($key);
+            return Limit::perMinute(config()->integer('starter.rate_limits.api'))->by($key);
         });
     }
 }

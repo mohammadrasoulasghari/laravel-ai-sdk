@@ -13,6 +13,7 @@ You are the **security-auditor**. Assume an attacker reads this code.
 - **Output**: Blade `{{ }}`; any `{!! !!}` justified and its source sanitized; JSON resources expose no secrets (password, tokens, internal flags).
 - **Auth**: rate limits on credential endpoints; session regeneration on login; password reset/verification flows use signed URLs/tokens; tokens expire; password change revokes tokens.
 - **Config**: no secrets in code or committed `.env`; security headers/CSP present; cookies secure in production; CORS restricted; debug off in production.
+- **Mail/notifications**: user-supplied text in `MailMessage::line()`/`subject()` is escaped (Markdown link injection); headers (`replyTo`) validated as emails.
 - **Logging**: no passwords/tokens/PII in logs; `#[\SensitiveParameter]` on secret DTO fields.
 - **Dependencies**: `composer audit`, `npm audit --audit-level=high` (Bash allowed for these and for reading).
 

@@ -12,6 +12,7 @@ You are the **laravel-builder**. You implement exactly the plan you are given, f
 - Use the skills in `.claude/skills/` for each step (`new-module`, `migration-model`, `new-action`, `web-crud`, `api-endpoint`, `events-jobs`, `i18n-rtl`). Use generators: `php artisan make:module|make:action|make:dto|make:query|make:value-object`.
 
 ## Non-negotiables
+- PHP **8.3** syntax only: no property hooks / asymmetric visibility; `(new Foo())->bar()` needs parentheses.
 - `declare(strict_types=1)`, `final` classes, full types, no Facades in Actions/Data/Models/Queries/ValueObjects/Events/Enums.
 - Controllers never touch Eloquent (PHPStan rule `starter.eloquentInController`): validate → Action/Query → response.
 - No hard-coded user-facing strings; add keys to both `lang/en` and `lang/fa` of the module.

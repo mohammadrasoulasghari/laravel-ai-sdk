@@ -1,0 +1,7 @@
+<?php
+
+declare(strict_types=1);
+
+it('{{ sentence }}', function (): void {
+    // Arrange a model with its factory, call resolve({{ class }}::class)->handle($model), assert the state change.
+})->todo();

@@ -34,7 +34,7 @@ final class MakeModuleCommand extends Command
         $stubs->write('module.lang', $module->path("lang/en/{$module->kebab}.php"), $replacements);
         $stubs->write('module.lang', $module->path("lang/fa/{$module->kebab}.php"), $replacements);
 
-        foreach (['Actions', 'Data', 'Database/Migrations', 'Database/Factories', 'Http/Controllers', 'Http/Requests', 'Models', 'Queries', 'resources/views'] as $dir) {
+        foreach (['Actions', 'Data', 'Database/Migrations', 'Database/Factories', 'Database/Seeders', 'Events', 'Http/Controllers', 'Http/Requests', 'Listeners', 'Models', 'Notifications', 'Policies', 'Queries', 'resources/views'] as $dir) {
             $files->ensureDirectoryExists($module->path($dir));
             $files->put($module->path($dir.'/.gitkeep'), '');
         }
@@ -44,8 +44,9 @@ final class MakeModuleCommand extends Command
         $this->components->info("Module [{$module->studly}] created in app/Modules/{$module->studly}.");
         $this->components->bulletList([
             "Translate the nav label in lang/fa/{$module->kebab}.php",
-            "Add a migration: php artisan make:migration create_{$module->snake}_table --path=app/Modules/{$module->studly}/Database/Migrations",
-            "Add actions/DTOs: php artisan make:action {$module->studly} Create{$module->studly}",
+            "Add a migration: php artisan make:migration create_{$module->snake}_<resources>_table --path=app/Modules/{$module->studly}/Database/Migrations",
+            "Add actions: php artisan make:action {$module->studly} <VerbNoun> [--no-data]",
+            'Delete routes/api.php if the module has no API, and remove folders you do not use (.gitkeep)',
             'Follow .claude/skills/new-module/SKILL.md, then run composer check',
         ]);
 
@@ -62,7 +63,25 @@ final class MakeModuleCommand extends Command
             return;
         }
 
-        $contents = (string) preg_replace('/(\n\s*\/\/ modules\n)/', "$1    \\{$class}::class,\n", $contents, 1);
+        $short = $module->studly.'ServiceProvider';
+
+        // Import the provider next to the other `use` lines…
+        $contents = (string) preg_replace('/^(use [^;]+;\n)(?!use )/m', "$1use {$class};\n", $contents, 1);
+
+        // …and add it to the "// modules" block, keeping that block alphabetical.
+        $contents = (string) preg_replace_callback(
+            '/(\/\/ modules\n)((?:    [A-Za-z]+::class,\n)*)/',
+            static function (array $match) use ($short): string {
+                $lines = array_filter(explode("\n", $match[2]));
+                $lines[] = "    {$short}::class,";
+                sort($lines);
+
+                return $match[1].implode("\n", $lines)."\n";
+            },
+            $contents,
+            1,
+        );
+
         $files->put($path, $contents);
         $stubs->format([$path]);
     }

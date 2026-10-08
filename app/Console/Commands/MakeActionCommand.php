@@ -15,7 +15,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[Signature('make:action
         {module : Existing module, e.g. Blog}
         {name : Verb-noun class name without suffix, e.g. ArchivePost}
-        {--data= : DTO class to accept (default: <Name>Data, created if missing)}')]
+        {--data= : DTO class to accept (default: <Name>Data, created if missing)}
+        {--no-data : The action takes a model instead of a DTO (e.g. DeletePost(Post $post))}')]
 final class MakeActionCommand extends Command
 {
     public function handle(StubRenderer $stubs): int
@@ -39,9 +40,15 @@ final class MakeActionCommand extends Command
             'sentence' => Str::lower(Str::headline($action->studly)),
         ];
 
-        $created = $stubs->write('action', $module->path("Actions/{$action->studly}.php"), $replacements);
-        $stubs->write('dto', $module->path("Data/{$data}.php"), [...$replacements, 'class' => $data]);
-        $stubs->write('action-test', base_path("tests/Feature/Modules/{$module->studly}/Actions/{$action->studly}Test.php"), $replacements);
+        $withoutData = $this->option('no-data') === true;
+
+        $created = $stubs->write($withoutData ? 'action-no-data' : 'action', $module->path("Actions/{$action->studly}.php"), $replacements);
+
+        if (! $withoutData) {
+            $stubs->write('dto', $module->path("Data/{$data}.php"), [...$replacements, 'class' => $data]);
+        }
+
+        $stubs->write($withoutData ? 'action-no-data-test' : 'action-test', base_path("tests/Feature/Modules/{$module->studly}/Actions/{$action->studly}Test.php"), $replacements);
 
         if (! $created) {
             $this->components->error("Action [{$action->studly}] already exists.");
@@ -49,7 +56,7 @@ final class MakeActionCommand extends Command
             return self::FAILURE;
         }
 
-        $this->components->info("Action [{$module->namespace('Actions\\'.$action->studly)}] created with {$data} and a test.");
+        $this->components->info("Action [{$module->namespace('Actions\\'.$action->studly)}] created".($withoutData ? '' : " with {$data}").' and a test.');
 
         return self::SUCCESS;
     }

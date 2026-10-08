@@ -22,6 +22,10 @@ Reference: `app/Modules/Blog/Events/PostPublished.php`, `Listeners/NotifyAuthorO
 - Queue names: `default`, `notifications`, `long` (configured in `config/horizon.php`).
 - Scheduling: `routes/console.php` → `Schedule::job(new PruneStaleDrafts)->daily()->onOneServer();`
 
+## Notifications
+- Notify a user: `$user->notify(new XNotification(...))`. Notify an address that is not a user (support inbox): `Notification::route('mail', $email)->notify(...)` in a Listener (Listeners may use Facades and read another module's Contract, e.g. `SettingsStore`).
+- `MailMessage::line()`/`subject()` render Markdown: **escape user-supplied text** (`e()` is not enough for Markdown — strip `[`, `]`, `(`, `)`, `*`, `_`, `` ` `` or use a Blade mail view with `{{ }}`) to prevent link injection. Set `->replyTo($visitorEmail)` instead of putting addresses in the body.
+
 ## Tests
 - Event dispatched: `Event::fake([PostPublished::class]); … Event::assertDispatched(...)`.
 - Wiring: `Event::fake(); Event::assertListening(PostPublished::class, NotifyAuthorOfPublication::class);`

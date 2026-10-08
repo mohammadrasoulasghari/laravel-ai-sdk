@@ -31,7 +31,7 @@ it('scaffolds a module and registers its provider', function (): void {
         ->and("{$base}/lang/en/zz-generator-probe.php")->toBeFile()
         ->and("{$base}/lang/fa/zz-generator-probe.php")->toBeFile()
         ->and("{$base}/Database/Migrations")->toBeDirectory()
-        ->and(file_get_contents(base_path('bootstrap/providers.php')))->toContain('App\\Modules\\'.PROBE.'\\Providers\\'.PROBE.'ServiceProvider::class')
+        ->and(file_get_contents(base_path('bootstrap/providers.php')))->toContain(PROBE.'ServiceProvider::class')
         ->and(file_get_contents("{$base}/Enums/".PROBE.'Permission.php'))->toContain("'zz-generator-probe.manage'");
 
     $this->artisan('make:module', ['name' => PROBE])->assertFailed();
@@ -77,4 +77,22 @@ it('generates a UI kit component', function (): void {
 
     $this->artisan('make:ui-component', ['name' => 'zz-probe'])->assertFailed();
     $this->artisan('make:ui-component', ['name' => '9bad'])->assertFailed();
+});
+
+it('generates an action without a DTO', function (): void {
+    $this->artisan('make:module', ['name' => PROBE])->assertSuccessful();
+    $this->artisan('make:action', ['module' => PROBE, 'name' => 'DeleteThing', '--no-data' => true])->assertSuccessful();
+
+    expect(file_get_contents(app_path('Modules/'.PROBE.'/Actions/DeleteThing.php')))->toContain('public function handle(Model $model): Model')
+        ->and(app_path('Modules/'.PROBE.'/Data/DeleteThingData.php'))->not->toBeFile();
+});
+
+it('registers the provider as an imported, sorted entry', function (): void {
+    $this->artisan('make:module', ['name' => PROBE])->assertSuccessful();
+
+    $providers = (string) file_get_contents(base_path('bootstrap/providers.php'));
+
+    expect($providers)->toContain('use App\\Modules\\'.PROBE.'\\Providers\\'.PROBE.'ServiceProvider;')
+        ->and($providers)->toContain('    '.PROBE.'ServiceProvider::class,')
+        ->and(mb_strpos($providers, 'UsersServiceProvider::class'))->toBeLessThan(mb_strpos($providers, PROBE.'ServiceProvider::class'));
 });

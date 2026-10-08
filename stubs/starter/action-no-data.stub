@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\{{ module }}\Actions;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * {{ description }}
+ *
+ * Replace Model with the concrete model this action operates on.
+ */
+final readonly class {{ class }}
+{
+    public function handle(Model $model): Model
+    {
+        // Enforce business rules (throw a DomainException subclass), persist, dispatch events.
+        return $model;
+    }
+}

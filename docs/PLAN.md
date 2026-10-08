@@ -51,28 +51,28 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [x] Users, Roles & permissions (spatie), Settings, Admin panel
 
 ### 7. Reference module
-- [ ] Blog (Post, Category): web + API + policy + events + tests
+- [x] Blog (Post, Category): web + API + policy + events + tests
 
 ### 8. Generators
-- [ ] make:module, make:action, make:dto, make:query, make:value-object, make:ui-component
-- [ ] Smoke test: generate a module, check passes, delete
+- [x] make:module, make:action, make:dto, make:query, make:value-object, make:ui-component
+- [x] Smoke test: generate a module, check passes, delete
 
 ### 9. Cross-cutting
-- [ ] Security headers, CORS, secure cookies, rate limits
-- [ ] Structured logging + correlation id, health/readiness, error reporting hook
-- [ ] Horizon, Telescope (local), Pulse, Pennant, Scramble, Jalali dates
+- [x] Security headers, CORS, secure cookies, rate limits
+- [x] Structured logging + correlation id, health/readiness, error reporting hook
+- [x] Horizon, Telescope (local), Pulse, Pennant, Scramble, Jalali dates
 
 ### 10. AI-First layer
-- [ ] CLAUDE.md, AGENTS.md, Boost + .mcp.json
-- [ ] Subagents, skills, commands, hooks, settings
+- [x] CLAUDE.md, AGENTS.md, Boost + .mcp.json
+- [x] Subagents, skills, commands, hooks, settings
 
 ### 11. Docs & bootstrapper
 - [x] docs/architecture.md, conventions.md, workflows/, add-ons/
 - [x] README, CONTRIBUTING, CHANGELOG, .github templates
-- [ ] `php artisan starter:init`
+- [x] `php artisan starter:init`
 
 ### 12. Agent trial
-- [ ] Fresh subagent builds Contact module via /feature; fix docs; delete module
+- [x] Fresh subagent builds Contact module via /feature; fix docs; delete module
 
 ### 13. Final audit
 - [ ] code-reviewer + security-auditor over whole codebase; fix findings

@@ -40,7 +40,8 @@ Request → FormRequest (validate + authorize, ->toData())
 | Model | `Models` | relations, casts, scopes (`#[Scope]`), accessors only. `#[Fillable]` explicit. **No business methods** (arch test inspects public methods). |
 | Value object | `ValueObjects` | `final readonly`, validated in the constructor, equality via `equals()`. |
 | Event | `Events` | past tense (`PostPublished`), `final readonly`, carries IDs/DTOs not request objects. |
-| Listener / Job | `Listeners`, `Jobs` | Jobs implement `ShouldQueue`, are idempotent (check state before acting), and set `$tries`/`backoff()`. |
+| Listener / Job | `Listeners`, `Jobs` | Application layer: may use Eloquent and other modules' Contracts. Jobs implement `ShouldQueue`, are idempotent (check state before acting), and set `$tries`/`backoff()`. |
+| Notification | `Notifications` | Mail/database/SMS messages. **Never** pass user-supplied text to `MailMessage::line()` unescaped — it renders Markdown (phishing links); escape it or use a Blade mail view. |
 | Policy | `Policies` | suffix `Policy`, checks permissions via enum values. |
 | Exception | `Exceptions` | extends `App\Shared\Exceptions\DomainException`, suffix `Exception`, provides `errorCode()` + `translationKey()`. |
 
@@ -64,7 +65,7 @@ Domain layers (`Actions`, `Data`, `Enums`, `Events`, `Models`, `Queries`, `Value
 | View names | `<module-kebab>::<path>` | `blog::posts.show`, `blog::admin.posts.form` |
 | Translation keys | `<module-kebab>::<file>.<key>` | `blog::posts.created` |
 | Permissions | `<module>.<resource>.<verb>` / `<module>.manage` | `blog.posts.manage` |
-| Tables | plural snake | `blog_posts` (prefix module tables with the module name) |
+| Tables | plural snake, prefixed with the module name | `blog_posts`, `contact_messages` (if the module name already is the resource, `contact_messages` is still correct; never a bare `messages`) |
 | Migrations | `YYYY_MM_DD_HHMMSS_<verb>_<table>_table.php` in `Database/Migrations` | |
 
 ## 5. Database
@@ -82,6 +83,14 @@ Domain layers (`Actions`, `Data`, `Enums`, `Events`, `Models`, `Queries`, `Value
 - Domain exceptions on web routes redirect back with a flash error automatically; on API routes they become RFC 9457 problem+json.
 - API: `/api/v1`, Sanctum bearer tokens, `throttle:api` (60/min) by default; responses through API Resources; errors are problem+json only. Query contract in [`api.md`](api.md).
 - Authorization only via Policies/Gates (`Gate::authorize()`, `$request->user()->can()`, `can:` middleware). Never check roles by name in controllers.
+
+### Rate limiting
+
+Named limiters live in the owning module provider's `bootModule()` (`RateLimiter::for('contact', …)`); the per-minute numbers come from `config('starter.rate_limits.<name>')` (add a key there). Apply with `->middleware('throttle:<name>')`. Test them by sending N+1 requests and asserting `429` (web: error page; API: problem+json). Business-level limits (e.g. "3 posts per day") belong in the Action and throw a `DomainException`.
+
+### Routes that change state
+
+`GET` must be safe: no writes, except idempotent bookkeeping that is part of viewing (e.g. marking a message as read when an admin opens it). Everything else is `POST/PUT/PATCH/DELETE` with CSRF.
 
 ## 7. Blade & UI
 

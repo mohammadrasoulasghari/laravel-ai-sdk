@@ -13,7 +13,7 @@ Reference: `app/Modules/Blog` (complete), `docs/architecture.md`, ADR-0004/0006.
    - creates `Providers/ContactServiceProvider.php` (registered in `bootstrap/providers.php` under `// modules`),
    - `Enums/ContactPermission.php` (`contact.manage`, granted to `admin` by default),
    - `routes/web.php` (public + `admin` group), `routes/api.php` (`/api/v1/contact`), `lang/{en,fa}/contact.php`, empty folders.
-3. Translate `lang/fa/contact.php` (the generator writes English placeholders into both).
+3. Translate `lang/fa/contact.php` (the generator writes English placeholders into both). Delete `routes/api.php` if the module has no API, and delete folders you will not use (they only contain `.gitkeep`).
 4. Data model → `migration-model` skill. Write paths → `new-action`. Screens → `web-crud`. API → `api-endpoint`.
 5. Navigation (in `bootModule()` of the provider), like Blog:
    ```php

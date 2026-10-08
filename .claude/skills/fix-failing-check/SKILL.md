@@ -8,6 +8,7 @@ description: Diagnose and fix a failing `composer check` (Pint, Rector, Prettier
 `composer check` = `lint` (Pint, Rector dry-run, Prettier) → `analyse` (PHPStan max) → `test` (Pest) → `test:types` (100%). Output is JSON when run by an agent; read `error_details`.
 
 ## Order of operations
+0. Failures can print huge HTML bodies. Re-run only the failing test (`./vendor/bin/pest --filter="…"`) and read the `message` field, not the whole response dump.
 1. **Style first**: `composer fix` (Rector → Pint → Prettier). Re-run `composer check`. Never hand-format.
 2. **PHPStan** (`composer analyse`): fix the cause, not the symptom.
    - `mixed` from config/request → typed accessors: `$request->string('x')->toString()`, `->integer()`, `->boolean()`, `->array()`, `Config::string()`.
