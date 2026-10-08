@@ -8,3 +8,4 @@ One line per completed phase.
 - 2026-10-08 — Phase 4: ModuleServiceProvider, Shared layer (DomainException, RFC 9457 ProblemDetails, correlation id, locales, flash), custom PHPStan rule, arch tests for conventions/boundaries/models/Blade/translations.
 - 2026-10-08 — Phase 5: Tailwind 4 tokens + dark mode, Vazirmatn, RTL/LTR, 19-component UI kit, base/app/guest/admin/error layouts, navigation registry, Jalali dates, style guide, error pages.
 - 2026-10-08 — Phase 6: Auth (login/register/reset/verify + API tokens), Users (admin CRUD, /me), Roles (spatie, permission registry, permissions:sync), Settings (cached store), Admin panel; 515 tests.
+- 2026-10-08 — Phase 7–10: Blog reference module (web+API+events+Pennant), generators + starter:init (smoke-tested: generated module passes composer check), security headers/CORS/JSON logs/readiness, Claude agents/skills/commands/hooks + Boost; 810 tests.

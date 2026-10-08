@@ -67,8 +67,8 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [ ] Subagents, skills, commands, hooks, settings
 
 ### 11. Docs & bootstrapper
-- [ ] docs/architecture.md, conventions.md, workflows/, add-ons/
-- [ ] README, CONTRIBUTING, CHANGELOG, .github templates
+- [x] docs/architecture.md, conventions.md, workflows/, add-ons/
+- [x] README, CONTRIBUTING, CHANGELOG, .github templates
 - [ ] `php artisan starter:init`
 
 ### 12. Agent trial

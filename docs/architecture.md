@@ -135,7 +135,7 @@ dark mode via a `.dark` class, RTL/LTR from `config/locales.php`, UI kit in
 | Queue | Redis + Horizon | `config/horizon.php`, `compose.yaml` service `horizon` |
 | Scheduler | `schedule:work` container | `routes/console.php` |
 | Cache | Redis, strategy in [`caching.md`](caching.md) | |
-| Feature flags | Laravel Pennant (database driver) | `app/Shared/Features` |
+| Feature flags | Laravel Pennant (database driver) | per module, e.g. `app/Modules/Blog/Features/ReadingTime.php` |
 | Observability | JSON logs + correlation id, Pulse, Telescope (local), `/up` + `/health/ready` | [`observability.md`](observability.md) |
 | API docs | Scramble → `/docs/api` | [`api.md`](api.md) |
 | Files | `Storage` with configurable `UPLOADS_DISK` (local/public/s3) | `config/filesystems.php` |
