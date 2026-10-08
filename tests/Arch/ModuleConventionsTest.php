@@ -106,7 +106,7 @@ foreach (modules() as $module) {
             "{$ns}\\Jobs",
             "{$ns}\\Listeners",
             "{$ns}\\Providers",
-            "{$ns}\\database",
+            "{$ns}\\Database",
             'App\Console',
         ]);
 }

@@ -47,8 +47,8 @@ Definition of phase-done: `composer check` green → Conventional Commit → one
 - [x] Error pages 403/404/419/429/500/503
 
 ### 6. Core modules
-- [ ] Auth (login, register, password reset, email verification)
-- [ ] Users, Roles & permissions (spatie), Settings, Admin panel
+- [x] Auth (login, register, password reset, email verification)
+- [x] Users, Roles & permissions (spatie), Settings, Admin panel
 
 ### 7. Reference module
 - [ ] Blog (Post, Category): web + API + policy + events + tests

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Shared\Auth\SystemAbility;
 use App\Shared\Exceptions\DomainException;
 use App\Shared\Http\Flash;
 use App\Shared\Http\Middleware\AssignCorrelationId;
@@ -27,6 +28,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(SetLocale::class);
         $middleware->web(append: [SetLocale::class]);
         $middleware->throttleApi('api');
+        // Every /admin route: authenticated, verified, and holding admin.access.
+        $middleware->group('admin', ['auth', 'verified', 'can:'.SystemAbility::AccessAdmin->value]);
         $middleware->redirectGuestsTo(fn (): string => route('login'));
         $middleware->redirectUsersTo(fn (): string => route('dashboard'));
     })

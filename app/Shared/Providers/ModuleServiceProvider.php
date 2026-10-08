@@ -18,7 +18,7 @@ use ReflectionClass;
  *  routes/api.php          → "api" group, prefixed /api/v1, names prefixed "api.v1."
  *  resources/views         → view namespace "<module-kebab>::"
  *  lang/<locale>/*.php     → translation namespace "<module-kebab>::"
- *  database/migrations     → loaded with the app migrations
+ *  Database/Migrations     → loaded with the app migrations
  *
  * Subclasses declare $policies, $listen, and Laravel's native $bindings / $singletons.
  */
@@ -35,7 +35,7 @@ abstract class ModuleServiceProvider extends ServiceProvider
         $path = $this->modulePath();
         $namespace = $this->moduleNamespace();
 
-        $this->loadMigrationsFrom($path.'/database/migrations');
+        $this->loadMigrationsFrom($path.'/Database/Migrations');
         $this->loadViewsFrom($path.'/resources/views', $namespace);
         $this->loadTranslationsFrom($path.'/lang', $namespace);
 

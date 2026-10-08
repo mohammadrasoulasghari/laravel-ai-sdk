@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use App\Modules\Users\Models\User;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -48,4 +49,26 @@ function bladeFiles(): array
 function root(string $path = ''): string
 {
     return dirname(__DIR__, 2).($path === '' ? '' : '/'.mb_ltrim($path, '/'));
+}
+
+/**
+ * A verified user holding the given role (see App\Modules\Roles\Enums\Role).
+ */
+function userWithRole(string $role): User
+{
+    $user = User::factory()->create();
+    $user->assignRole($role);
+
+    return $user;
+}
+
+/**
+ * A verified user holding exactly the given permissions (plus nothing else).
+ */
+function userWithPermissions(string ...$permissions): User
+{
+    $user = User::factory()->create();
+    $user->givePermissionTo($permissions);
+
+    return $user;
 }

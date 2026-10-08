@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Modules\Roles\Database\Seeders\RolesSeeder;
+use App\Modules\Users\Database\Seeders\UsersSeeder;
 use Illuminate\Database\Seeder;
 
+/**
+ * Calls each module's seeder in dependency order. `make:module` does not edit this
+ * file — add new module seeders here by hand.
+ */
 final class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            RolesSeeder::class,
+            UsersSeeder::class,
         ]);
     }
 }

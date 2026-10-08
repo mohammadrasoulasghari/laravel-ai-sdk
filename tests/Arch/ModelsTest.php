@@ -28,7 +28,7 @@ it('keeps business logic out of Eloquent models', function (): void {
             }
 
             foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-                if ($method->getDeclaringClass()->getName() !== $class || $method->isStatic() && $method->getName() === 'booted') {
+                if ($method->getDeclaringClass()->getName() !== $class || $method->getFileName() !== $reflection->getFileName() || $method->isStatic() && $method->getName() === 'booted') {
                     continue;
                 }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Shared\Providers;
 
+use App\Shared\Auth\PermissionRegistry;
+use App\Shared\Auth\SystemAbility;
 use App\Shared\Navigation\Navigation;
 use App\Shared\View\Components\Date;
 use App\Shared\View\Composers\LayoutComposer;
@@ -17,6 +19,7 @@ final class SharedServiceProvider extends ServiceProvider
     /** @var array<class-string, class-string> */
     public array $singletons = [
         Navigation::class => Navigation::class,
+        PermissionRegistry::class => PermissionRegistry::class,
     ];
 
     public function boot(): void
@@ -24,5 +27,7 @@ final class SharedServiceProvider extends ServiceProvider
         View::composer(['components.layouts.*', 'errors::*', 'errors.*'], LayoutComposer::class);
 
         Blade::component(Date::class, 'ui.date');
+
+        $this->app->make(PermissionRegistry::class)->register(SystemAbility::cases(), defaultRoles: ['admin']);
     }
 }
