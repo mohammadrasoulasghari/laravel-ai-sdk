@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-08
+
+### Fixed
+- `DomainException` no longer accepts a numeric code: wrapping a `QueryException` (string SQLSTATE code) could raise a `TypeError` (found while building on the kit).
+- Ignore `.claude/worktrees/` so parallel agent worktrees are never committed.
+
 ## [1.0.0] - 2026-10-08
 
 ### Security

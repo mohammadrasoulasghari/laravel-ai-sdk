@@ -6,6 +6,7 @@ namespace App\Shared\Exceptions;
 
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Base for every business-rule violation. Throw a specific subclass, never this directly.
@@ -16,6 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class DomainException extends RuntimeException
 {
+    /** No numeric code: domain errors are identified by errorCode(); wrapped DB errors carry string codes. */
+    public function __construct(string $message = '', ?Throwable $previous = null)
+    {
+        parent::__construct($message, 0, $previous);
+    }
+
     /** Stable machine-readable code, e.g. "blog.post_already_published". */
     abstract public function errorCode(): string;
 
