@@ -35,6 +35,7 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  * @property-read string $body_html
+ * @property-read int $reading_minutes
  * @property-read Category $category
  * @property-read User $author
  */
@@ -80,6 +81,16 @@ final class Post extends Model
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
         ]));
+    }
+
+    /**
+     * Estimated reading time at ~200 words per minute (min. 1).
+     *
+     * @return Attribute<int<1, max>, never>
+     */
+    protected function readingMinutes(): Attribute
+    {
+        return Attribute::get(fn (): int => max(1, (int) ceil(str_word_count(strip_tags($this->body_html), 0, 'آ-ی') / 200)));
     }
 
     /** @return array<string, string> */

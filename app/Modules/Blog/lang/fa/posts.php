@@ -13,6 +13,7 @@ return [
     'all_categories' => 'همه',
     'by_author' => 'نوشته :name',
     'read_more' => 'ادامه مطلب',
+    'reading_time' => '{1} :minutes دقیقه مطالعه|[2,*] :minutes دقیقه مطالعه',
     'back_to_blog' => 'بازگشت به بلاگ',
     'search_placeholder' => 'جستجوی نوشته‌ها',
     'empty' => 'هنوز نوشته‌ای وجود ندارد.',

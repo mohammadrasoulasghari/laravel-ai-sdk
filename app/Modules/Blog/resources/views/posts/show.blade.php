@@ -16,6 +16,13 @@
                 }}</span>
                 <x-ui.date :value="$post->published_at" />
                 <x-ui.badge>{{ $post->category->name }}</x-ui.badge>
+                @feature (\App\Modules\Blog\Features\ReadingTime::class)
+                    <span>{{
+                        trans_choice('blog::posts.reading_time', $post->reading_minutes, [
+                            'minutes' => $post->reading_minutes,
+                        ])
+                    }}</span>
+                @endfeature
             </div>
         </header>
 
