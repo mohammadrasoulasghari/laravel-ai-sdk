@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use App\Shared\Auth\SystemAbility;
 use App\Shared\Exceptions\DomainException;
+use App\Shared\Http\Controllers\ReadinessController;
 use App\Shared\Http\Flash;
 use App\Shared\Http\Middleware\AssignCorrelationId;
+use App\Shared\Http\Middleware\SecurityHeaders;
 use App\Shared\Http\Middleware\SetLocale;
 use App\Shared\Http\Problems\ProblemDetailsFactory;
 use Illuminate\Foundation\Application;
@@ -14,15 +16,20 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function (): void {
+            // Readiness probe outside the web/api groups: no session, no throttling.
+            Route::get('/health/ready', ReadinessController::class)->name('health.ready');
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->prepend(AssignCorrelationId::class);
+        $middleware->prepend([AssignCorrelationId::class, SecurityHeaders::class]);
         // Global run negotiates Accept-Language (also for unmatched routes/404s);
         // the web run re-resolves after the session has started.
         $middleware->append(SetLocale::class);

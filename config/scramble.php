@@ -52,11 +52,11 @@ return [
         /*
          * Description rendered on the home page of the API documentation (`/docs/api`).
          */
-        'description' => '',
+        'description' => 'Versioned JSON API. Errors are RFC 9457 problem+json. See docs/api.md.',
     ],
 
     'ui' => [
-        'title' => null,
+        'title' => env('APP_NAME', 'Laravel').' API',
     ],
 
     /*

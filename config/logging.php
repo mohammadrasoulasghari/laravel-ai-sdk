@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -53,6 +54,17 @@ return [
     */
 
     'channels' => [
+
+        // One JSON object per line on stderr — the production default (LOG_STACK=json).
+        // Laravel Context (correlation_id, user_id) is appended to every record.
+        'json' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'info'),
+            'handler' => StreamHandler::class,
+            'handler_with' => ['stream' => 'php://stderr'],
+            'formatter' => JsonFormatter::class,
+            'processors' => [PsrLogMessageProcessor::class],
+        ],
 
         'stack' => [
             'driver' => 'stack',

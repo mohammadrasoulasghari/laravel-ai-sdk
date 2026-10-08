@@ -30,6 +30,9 @@ return [
     |
     */
 
+    // Disk for user uploads (avatars, attachments). local/public/s3 — any S3-compatible service.
+    'uploads' => env('UPLOADS_DISK', 'public'),
+
     'disks' => [
 
         'local' => [
