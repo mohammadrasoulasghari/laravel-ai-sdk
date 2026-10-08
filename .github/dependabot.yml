@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    commit-message: { prefix: "build(deps)" }
+    groups:
+      laravel: { patterns: ["laravel/*", "illuminate/*"] }
+      dev-tools: { patterns: ["pestphp/*", "larastan/*", "rector/*", "phpstan/*"], dependency-type: development }
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    commit-message: { prefix: "build(deps)" }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: monthly }
+    commit-message: { prefix: "ci" }

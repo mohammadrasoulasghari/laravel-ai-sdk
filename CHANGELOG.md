@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-08
+
+### Added
+- Public-release packaging: rewritten README (+ `README.fa.md`), screenshots in `docs/images`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, Dependabot config, Composer metadata (name, keywords, support links).
+
+### Fixed
+- English pages now use a Latin system font stack: Vazirmatn rendered every digit as a Persian digit (dates, e-mails, counts).
+
+### Removed
+- Internal build logs `docs/PLAN.md` and `docs/PROGRESS.md` (the Persian build report stays in `docs/FINAL_REPORT.md`).
+
 ## [1.0.1] - 2026-10-08
 
 ### Fixed

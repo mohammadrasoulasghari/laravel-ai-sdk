@@ -1,13 +1,21 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "acme/laravel-ai-starter",
+    "name": "mohammadrasoulasghari/laravel-ai-sdk",
     "type": "project",
-    "description": "AI-first, modular Laravel starter kit (Blade, API, strict tooling).",
+    "description": "An AI-first, modular Laravel 13 starter kit: architecture enforced by tests, static analysis and hooks so humans and AI coding agents ship consistent code.",
     "keywords": [
         "laravel",
         "starter-kit",
+        "boilerplate",
         "modular",
-        "ai-first"
+        "ai",
+        "claude-code",
+        "agents",
+        "blade",
+        "rtl",
+        "persian",
+        "pest",
+        "phpstan"
     ],
     "license": "MIT",
     "require": {
@@ -156,10 +164,15 @@
         "fix": "Apply Rector, Pint and Prettier fixes.",
         "check": "Everything CI runs: lint + analyse + test + type coverage. Must be green before done."
     },
-    "homepage": "https://github.com/your-org/laravel-ai-starter",
+    "homepage": "https://github.com/mohammadrasoulasghari/laravel-ai-sdk",
     "authors": [
         {
-            "name": "Laravel AI-First Starter Kit contributors"
+            "name": "Mohammad Rasoul Asghari",
+            "homepage": "https://github.com/mohammadrasoulasghari"
         }
-    ]
+    ],
+    "support": {
+        "issues": "https://github.com/mohammadrasoulasghari/laravel-ai-sdk/issues",
+        "source": "https://github.com/mohammadrasoulasghari/laravel-ai-sdk"
+    }
 }

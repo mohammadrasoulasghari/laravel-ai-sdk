@@ -1,49 +1,106 @@
+<div align="center">
+
 # Laravel AI-First Starter Kit
 
-A modular **Laravel 13** (PHP ≥ 8.3) starter kit built so that AI coding agents — and humans — produce
-consistent, reviewable code. Conventions are written down once (`CLAUDE.md`, `docs/`), turned into
-step-by-step skills for agents, and **enforced** by static analysis, architecture tests, git hooks,
-Claude Code hooks and CI.
+**A modular Laravel 13 foundation where the rules are enforced by tooling — so humans *and* AI coding agents ship consistent, reviewable code.**
 
-UI: Blade + Alpine.js + Tailwind CSS 4, Persian (RTL, default) and English (LTR). API: versioned JSON
-with Sanctum and RFC 9457 problem details. Infra: MySQL 8.4, Redis, Horizon, Docker via Sail.
+[![CI](https://github.com/mohammadrasoulasghari/laravel-ai-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammadrasoulasghari/laravel-ai-sdk/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![PHP](https://img.shields.io/badge/PHP-8.3%2B-777bb4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-ff2d20?logo=laravel&logoColor=white)
+![PHPStan](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)
+![Type coverage](https://img.shields.io/badge/type%20coverage-100%25-brightgreen)
+![Pest](https://img.shields.io/badge/tested%20with-Pest%204-f28d1a)
 
-## Features
+[Quick start](#quick-start) · [Why](#why-this-exists) · [What's inside](#whats-inside) · [AI agents](#built-for-ai-agents) · [Docs](#documentation) · [فارسی](README.fa.md)
 
-- **Modular monolith** — `app/Modules/<Name>` per domain, boundaries enforced by arch tests; shared kernel in `app/Shared`.
-- **Ready-made modules** — Auth (login, register, password reset, email verification, API tokens), Users, Roles & permissions (spatie/laravel-permission), Settings, Admin panel, and **Blog** as the reference module (web + API + policies + events + tests).
-- **Strict code** — `strict_types`, `final` classes, Actions/Query objects/DTOs (no repositories), PHPStan level max with a custom rule, 100% type coverage, Pint, Rector.
-- **UI kit** — 20 `<x-ui.*>` components, app/guest/admin layouts, dark mode, design tokens, logical (RTL-safe) utilities, Vazirmatn font, Jalali dates, style guide at `/_styleguide`, error pages.
-- **API** — `/api/v1`, Sanctum tokens, problem+json errors, filtering/sorting/pagination contract, OpenAPI docs at `/docs/api` (Scramble).
-- **Security** — CSP with nonces, security headers (HSTS toggle), CORS, rate limits, encrypted sessions.
-- **Observability** — JSON logs with correlation id, `/up` and `/health/ready`, Pulse, Horizon, Telescope (local), error-tracker hook.
-- **Feature flags** — Laravel Pennant.
-- **Generators** — `make:module`, `make:action`, `make:dto`, `make:query`, `make:value-object`, `make:ui-component`, and `starter:init` to turn the kit into your project.
-- **AI-first layer** — `CLAUDE.md`, `AGENTS.md`, 9 Claude Code subagents, 11 skills, 6 slash commands, enforcement hooks, Laravel Boost MCP.
+<img src="docs/images/styleguide-light.png" alt="Admin UI kit — light mode, Persian RTL" width="49%"> <img src="docs/images/styleguide-dark.png" alt="Admin UI kit — dark mode, Persian RTL" width="49%">
 
-## Quick start (Docker)
+</div>
+
+> **Not to be confused with** Laravel's official AI SDK (`laravel/ai`), which is a *library for calling AI models from your app*.
+> This is a *starter kit for structuring a whole Laravel application* so that **AI coding agents** (Claude Code, Cursor, Copilot, Codex…) can extend it without drifting from your architecture. The two work well together.
+
+## Why this exists
+
+AI agents write code fast — and quietly invent a new structure every time. Prose guidelines don't stop it; a long `CLAUDE.md` is ignored the moment it's inconvenient.
+
+This kit takes the opposite approach: **every rule has an enforcer.** If a rule can't be checked by a test, a static-analysis rule, a formatter or a hook, it doesn't go in the "golden rules".
+
+| Rule | Enforced by |
+|---|---|
+| Business logic never lives in controllers, models or views | Custom PHPStan rule + Pest architecture tests |
+| Modules can't reach into each other's internals | Architecture tests (`ModuleBoundariesTest`) |
+| `final`, `strict_types`, full types everywhere | Pint, PHPStan **level max**, 100% type coverage |
+| No hard-coded UI text, RTL-safe CSS only | Blade arch tests (+ translation parity test) |
+| Nobody edits `.env`, `vendor/` or committed migrations | Claude Code `PreToolUse` hook |
+| An agent can't say "done" while the architecture is broken | Claude Code `Stop` hook (arch tests + PHPStan) |
+| Conventional commits, formatted code | CaptainHook git hooks + CI |
+
+Everything is wired behind one command — **`composer check`** — that CI also runs.
+
+## Quick start
 
 ```bash
-git clone <repository-url> my-app
+git clone https://github.com/mohammadrasoulasghari/laravel-ai-sdk.git my-app
 cd my-app
-make setup        # .env, composer install, Sail up, key, migrate + seed, npm build
+make setup          # Docker (Sail): .env, deps, key, MySQL + Redis + Mailpit, migrate + seed, assets
 ```
 
-Open **http://localhost** and log in with **`admin@example.com` / `password`** (super-admin).
-Mailpit: http://localhost:8025.
+Open **http://localhost** and sign in with **`admin@example.com` / `password`** (local seed only).
 
-### Without Docker (SQLite)
+<details>
+<summary><b>No Docker?</b> Run it with SQLite</summary>
 
 Requires PHP 8.3+, Composer and Node 22.
 
 ```bash
 cp .env.example .env
-# In .env: DB_CONNECTION=sqlite and remove the other DB_* lines;
-#          SESSION_DRIVER=file, CACHE_STORE=file, QUEUE_CONNECTION=sync (no Redis), MAIL_MAILER=log
+# In .env: DB_CONNECTION=sqlite (remove the other DB_* lines),
+#          SESSION_DRIVER=file, CACHE_STORE=file, QUEUE_CONNECTION=sync, MAIL_MAILER=log
 touch database/database.sqlite
-composer setup    # install, key, migrate + seed, npm install + build
-php artisan serve & npm run dev   # or `composer dev` (server, Horizon, logs, Vite) if Redis runs
+composer setup                    # install, key, migrate + seed, npm install + build
+php artisan serve & npm run dev
 ```
+</details>
+
+Make it *your* project in one command:
+
+```bash
+php artisan starter:init --name="Acme Shop" --package=acme/shop --url=https://shop.test --remove-example --fresh-git
+```
+
+It renames `composer.json`/`package.json`, sets `APP_NAME`/`APP_URL`, resets the changelog and git history, and (optionally) deletes the example Blog module. Run it without flags for interactive prompts, or add `--dry-run` to preview.
+
+## What's inside
+
+- 🧱 **Modular monolith** — one folder per business domain in `app/Modules/<Name>` (Actions · DTOs · Queries · Policies · Events · Models · views · lang · routes · migrations). A `ModuleServiceProvider` wires everything by convention.
+- 🧭 **Clear write/read paths** — `FormRequest → thin controller → Action (writes) / Query object (reads) → Blade view or API Resource`. No repositories, no magic ([ADR-0005](docs/adr/0005-no-repository-pattern.md)).
+- 👤 **Ready-made modules** — Auth (login, register, reset, email verification, API tokens), Users, Roles & permissions (spatie), Settings, Admin panel, and **Blog** as a complete reference module (web + API + policies + events + queued notifications + tests).
+- 🎨 **UI kit & i18n** — ~20 `<x-ui.*>` Blade components, Tailwind CSS 4 design tokens, dark mode, **Persian (RTL) and English (LTR)** out of the box, Jalali dates, a built-in style guide at `/_styleguide`, accessible error pages.
+- 🔌 **API** — versioned `/api/v1`, Sanctum tokens, RFC 9457 `problem+json` errors, a documented pagination/filter/sort contract, OpenAPI docs generated at `/docs/api` (Scramble).
+- 🔒 **Security by default** — CSP with nonces, security headers, CORS allow-list, rate limits on credential endpoints, secure cookies, signed URLs, mass-assignment protection, audited final review.
+- 📈 **Observability** — JSON logs with a correlation id on every request and queued job, `/up` + `/health/ready`, Horizon, Pulse, Telescope (local only), error-tracker hook.
+- ⚙️ **Generators** — `make:module`, `make:action`, `make:dto`, `make:query`, `make:value-object`, `make:ui-component` produce code that passes `composer check` **without edits**.
+- 🤖 **AI-first layer** — `CLAUDE.md` / `AGENTS.md`, 9 subagents, 11 skills, 6 slash commands, enforcement hooks, Laravel Boost MCP.
+
+<details>
+<summary><b>More screenshots</b></summary>
+<br>
+
+| Users (Persian, RTL) | Users (English, LTR) |
+|---|---|
+| <img src="docs/images/admin-users.png" alt="Admin users — Persian RTL"> | <img src="docs/images/admin-users-en.png" alt="Admin users — English LTR"> |
+
+| Roles & permissions | Blog (reference module) |
+|---|---|
+| <img src="docs/images/admin-roles.png" alt="Roles and permissions"> | <img src="docs/images/blog-admin.png" alt="Blog posts admin"> |
+
+| Generated OpenAPI docs | Mobile login |
+|---|---|
+| <img src="docs/images/api-docs.png" alt="OpenAPI documentation"> | <img src="docs/images/login-mobile.png" alt="Login on mobile" width="260"> |
+
+</details>
 
 ## Architecture at a glance
 
@@ -61,47 +118,15 @@ app/Modules/Blog/   Actions/ Data/ Enums/ Events/ Exceptions/ Http/ Models/ Poli
 app/Shared/         ModuleServiceProvider, DomainException, problem details, middleware, navigation, localization
 ```
 
-Details: [docs/architecture.md](docs/architecture.md) · rules: [docs/conventions.md](docs/conventions.md).
+Modules talk to each other only through `Contracts`, `Data`, `Enums` and `Events` — never through each other's internals (enforced). Read more in [docs/architecture.md](docs/architecture.md) and the [18 ADRs](docs/adr).
 
-## Commands
+## Built for AI agents
 
-| Command | What it does |
-|---|---|
-| `composer check` | Everything CI runs: lint + analyse + test + type coverage. Must be green. |
-| `composer fix` | Rector → Pint → Prettier |
-| `composer lint` | Pint, Rector (dry run), Prettier — no changes |
-| `composer analyse` | PHPStan / Larastan level max |
-| `composer test` | Pest (unit, feature, arch) |
-| `composer test:types` / `test:coverage` / `test:mutate` | 100% type coverage / ≥ 80% line coverage / mutation testing |
-| `composer setup` / `composer dev` | Non-Docker install / dev processes (server, Horizon, Pail logs, Vite) |
-| `make setup \| up \| down \| fresh \| test \| check \| fix \| shell` | Docker (Sail) wrappers; `make` lists them |
-| `npm run dev \| build \| format` | Vite and Prettier |
-| `php artisan make:module Contact` | Module skeleton, provider registered |
-| `php artisan make:action Contact SendMessage` | Action + DTO + feature test |
-| `php artisan make:dto \| make:query \| make:value-object <Module> <Name>` | DTO / Query object / Value Object (+ unit test) |
-| `php artisan make:ui-component tabs` | `<x-ui.tabs>` component |
-| `php artisan permissions:sync` | Create roles and all module permissions (idempotent) |
-| `php artisan starter:init` | Rename the kit into a new project |
+[`CLAUDE.md`](CLAUDE.md) is the single source of truth (other tools read [`AGENTS.md`](AGENTS.md), which points to it). In Claude Code, build a feature end-to-end with:
 
-## Create a new project from this kit
-
-```bash
-git clone <repository-url> acme-shop && cd acme-shop
-php artisan starter:init --name="Acme Shop" --package=acme/shop --url=https://shop.test --remove-example --fresh-git
-make setup
+```text
+/feature Add a "Contact us" form that emails support, rate-limited, with an admin inbox
 ```
-
-`starter:init` renames `composer.json`/`package.json`, sets `APP_NAME`/`APP_URL`, resets `CHANGELOG.md`
-and the README title, generates an app key, optionally deletes the Blog example and restarts git
-history. Run it without options for interactive prompts, or add `--dry-run` to preview. See ADR-0017.
-
-## Working with AI agents
-
-[`CLAUDE.md`](CLAUDE.md) is the single source of truth for agents (other tools read
-[`AGENTS.md`](AGENTS.md), which points to it). Generic Laravel guidance from Laravel Boost lives in
-[`docs/ai/laravel-boost.md`](docs/ai/laravel-boost.md); `CLAUDE.md` wins on conflicts (ADR-0016).
-
-In Claude Code, build a feature with **`/feature <description>`**:
 
 ```mermaid
 flowchart LR
@@ -114,75 +139,99 @@ flowchart LR
     V -- PASS --> D[docs-keeper] --> C[commit]
 ```
 
-Other commands: `/new-module <Name>`, `/review`, `/check`, `/adr <topic>`, `/audit`.
+**Does it actually work?** Yes — a fresh agent that had read only `CLAUDE.md` built a complete Contact module (public form, rate limiting, queued mail, admin inbox, fa/en, 47 tests) through `/feature`, `composer check` green. Its 13 friction points were fed back into the skills and generators. The same kit was then used to build a full production-style platform with several agents working in parallel git worktrees.
 
-| Agent (`.claude/agents/`) | Role |
-|---|---|
-| researcher | Verifies package versions and APIs before installing (read-only) |
-| architect | Plans features, writes ADRs (writes only `docs/`) |
-| laravel-builder | Back-end implementation from the plan |
-| blade-ui-builder | Views, UI kit, RTL/LTR, dark mode |
-| test-writer | Pest tests (writes only `tests/`) |
-| code-reviewer | Conventions and architecture review (read-only) |
-| security-auditor | OWASP-focused audit (read-only) |
-| qa-verifier | Runs every gate independently and reports PASS/FAIL |
-| docs-keeper | Keeps docs and CHANGELOG accurate |
+| Agent | Role | | Skill | For |
+|---|---|---|---|---|
+| researcher | Verifies versions & APIs before installing | | new-module / new-action | Modules, write use cases |
+| architect | Plans features, writes ADRs | | migration-model | Schema, models, factories |
+| laravel-builder | Back-end from the plan | | web-crud / api-endpoint | Screens and `/api/v1` endpoints |
+| blade-ui-builder | Views, RTL/LTR, dark mode | | blade-component | UI kit components |
+| test-writer | Pest tests (writes only `tests/`) | | events-jobs | Idempotent queued work |
+| code-reviewer · security-auditor | Read-only reviews | | i18n-rtl · writing-tests | Translations, tests |
+| qa-verifier · docs-keeper | Run gates, keep docs true | | write-adr · fix-failing-check | Decisions, fixing red gates honestly |
 
-| Skill (`.claude/skills/`) | Use for |
-|---|---|
-| new-module, new-action, migration-model | Modules, write use cases, schema + models |
-| web-crud, api-endpoint, blade-component | Screens, `/api/v1` endpoints, UI kit components |
-| events-jobs, i18n-rtl, writing-tests | Side effects/queues, translations/RTL, tests |
-| write-adr, fix-failing-check | Decisions, fixing red gates without weakening rules |
-
-**Hooks** (`.claude/settings.json`, ADR-0018): Pint after every PHP edit; edits to `.env`, `vendor/`,
-`node_modules/` and committed migrations are blocked; on stop, arch tests + PHPStan on changed files must pass.
-
-**Laravel Boost MCP** (`.mcp.json`): `search-docs` for version-correct docs, `database-schema`,
-`list-routes`, `read-log-entries`.
-
-Human-oriented recipes: [docs/workflows/](docs/workflows).
+Works with any agent that reads `AGENTS.md`; the Claude Code specifics (subagents, skills, hooks) live in `.claude/`.
 
 ## Quality gates
 
-| Gate | Tool | Runs in |
+| Gate | Tool | Where it runs |
 |---|---|---|
-| Code style | Pint (strict), Prettier (Blade/JS/CSS) | `composer lint`, pre-commit (Pint), Claude hook, CI |
-| Refactoring rules | Rector (PHP 8.3 + Laravel 13 sets) | `composer lint`, CI |
-| Static analysis | PHPStan/Larastan level max + custom rule (no Eloquent in controllers), no baseline | `composer analyse`, pre-commit, Claude stop hook, CI |
-| Architecture | Pest arch tests (`tests/Arch`) | `composer test`, Claude stop hook, CI |
-| Tests | Pest unit + feature (MySQL in CI) | `composer test`, CI with ≥ 80% coverage |
-| Type coverage | Pest type coverage 100% | `composer test:types`, CI |
+| Style | Pint (strict) · Prettier (Blade/JS/CSS) | `composer lint`, pre-commit, Claude hook, CI |
+| Refactoring | Rector (PHP 8.3 + Laravel 13 sets) | `composer lint`, CI |
+| Static analysis | PHPStan/Larastan **level max**, no baseline | `composer analyse`, pre-commit, Claude stop hook, CI |
+| Architecture | Pest arch tests | `composer test`, Claude stop hook, CI |
+| Tests | Pest 4 (SQLite locally, MySQL in CI) | `composer test`, CI (≥ 80% coverage) |
+| Type coverage | 100% | `composer test:types`, CI |
 | Mutation | Pest mutation (≥ 80%) | CI on pull requests |
 | Dependencies | `composer audit`, `npm audit` | CI |
-| Commit messages | Conventional Commits (CaptainHook) | `commit-msg` hook |
 
-## Project layout
+## Commands
 
-```
-app/Console/        generators, starter:init, StubRenderer
-app/Modules/        Admin, Auth, Blog (reference), Roles, Settings, Users
-app/Shared/         cross-cutting kernel
-resources/          css (tokens), js (Alpine), views (layouts, UI kit, error pages)
-lang/{en,fa}/       shared translations (modules have their own lang/)
-stubs/starter/      generator templates
-tests/              Arch/, Feature/, Unit/, Support/helpers.php
-tools/phpstan/      custom PHPStan rules
-docs/               architecture, conventions, ADRs, workflows, add-ons
-.claude/            agents, skills, commands, hooks, settings
-```
+| Command | What it does |
+|---|---|
+| `composer check` | Everything CI runs — must be green before "done" |
+| `composer fix` | Rector → Pint → Prettier |
+| `composer test` · `test:types` · `test:coverage` · `test:mutate` | Test suites and coverage gates |
+| `make setup` · `up` · `down` · `fresh` · `check` · `shell` | Docker (Sail) wrappers |
+| `php artisan make:module Contact` | Module skeleton, provider registered |
+| `php artisan make:action Contact SendMessage` | Action + DTO + feature test (`--no-data` for model-only actions) |
+| `php artisan make:dto` · `make:query` · `make:value-object` · `make:ui-component` | More generators |
+| `php artisan permissions:sync` | Create roles and every module's permissions (idempotent) |
+
+## Stack
+
+| | |
+|---|---|
+| Runtime | PHP 8.3+ · Laravel 13 · MySQL 8.4 (PostgreSQL works) · Redis · Horizon |
+| Front-end | Blade · Alpine.js · Tailwind CSS 4 · Vite 8 |
+| Auth & access | Sanctum · spatie/laravel-permission · Policies/Gates |
+| Quality | Pest 4 · Larastan · Pint · Rector · Prettier · CaptainHook |
+| Ops | Sail · Pulse · Telescope (local) · Pennant (feature flags) · Scramble (OpenAPI) |
+| AI tooling | Laravel Boost (MCP) · Claude Code agents/skills/hooks |
+
+> The kit targets **PHP 8.3** on purpose (Pest 5 needs 8.4 — see [ADR-0003](docs/adr/0003-pest-4-until-php-84.md)). Sail's runtime image is PHP 8.4; CI tests both.
+
+## How it compares
+
+| | This kit | Laravel starter kits (Breeze / Jetstream) | Filament | `nwidart/laravel-modules` |
+|---|---|---|---|---|
+| Goal | Enforce architecture for humans **and agents** | Auth scaffolding | Admin panel framework | Module packaging |
+| Module boundaries enforced | ✅ arch tests | ❌ | ❌ | ❌ |
+| Agent skills, hooks, subagents | ✅ | ❌ | ❌ | ❌ |
+| Persian UI + Jalali dates built in | ✅ | ❌ | ❌ | ❌ |
+| Opinionated about code style/layers | very | little | medium | little |
+| Admin UI | Blade, simple, yours to extend | n/a | full-featured | n/a |
+
+It is deliberately **opinionated and Blade-only** (no Livewire/Inertia). If you want a full admin builder, use Filament inside a module; if you want maximum freedom, use Laravel's stock skeleton.
 
 ## Documentation
 
-Start at [docs/README.md](docs/README.md). Key pages: [architecture](docs/architecture.md),
-[conventions](docs/conventions.md), [API](docs/api.md), [ADRs](docs/adr), [workflows](docs/workflows),
-[add-ons](docs/add-ons). Contributing: [CONTRIBUTING.md](CONTRIBUTING.md).
+| | |
+|---|---|
+| [docs/README.md](docs/README.md) | Index |
+| [Architecture](docs/architecture.md) · [Conventions](docs/conventions.md) | How the code is organised and the rules (with good/bad examples) |
+| [Workflows](docs/workflows) | Add a module / endpoint / page / job / test |
+| [API contract](docs/api.md) · [Caching](docs/caching.md) · [Observability](docs/observability.md) | Reference |
+| [Add-ons](docs/add-ons) | Multi-tenancy, payments, SMS, 2FA, Sentry, uploads, search — documented, not forced on the core |
+| [ADRs](docs/adr) | Every non-obvious decision and why |
+| [Build report (Persian)](docs/FINAL_REPORT.md) | How the kit was built and audited |
 
-## Versioning
+## Roadmap
 
-[Semantic Versioning](https://semver.org). Changes are recorded in [CHANGELOG.md](CHANGELOG.md)
-([Keep a Changelog](https://keepachangelog.com)); every PR adds a line under `[Unreleased]`.
+- [ ] Pest 5 / PHP 8.4 baseline once the ecosystem moves
+- [ ] Playwright browser tests for the critical paths
+- [ ] More add-on recipes (Stripe/Zarinpal payments, Scout search) as runnable modules
+- [ ] `composer create-project` support via Packagist
 
-## License
+Ideas and votes welcome in [Discussions / Issues](https://github.com/mohammadrasoulasghari/laravel-ai-sdk/issues).
 
-[MIT](LICENSE).
+## Contributing
+
+Contributions are very welcome — start with [CONTRIBUTING.md](CONTRIBUTING.md). The one rule: `composer check` must pass, and a change to a convention needs an [ADR](docs/adr/template.md). Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). For vulnerabilities see [SECURITY.md](SECURITY.md) — don't open a public issue.
+
+## Credits & license
+
+Built on the shoulders of [Laravel](https://laravel.com), [Pest](https://pestphp.com), [Larastan](https://github.com/larastan/larastan), [Laravel Pint](https://laravel.com/docs/pint), [Rector](https://getrector.com), [spatie/laravel-permission](https://github.com/spatie/laravel-permission), [Scramble](https://scramble.dedoc.co), [Laravel Boost](https://laravel.com/docs/boost), [Tailwind CSS](https://tailwindcss.com), [Alpine.js](https://alpinejs.dev) and [Vazirmatn](https://github.com/rastikerdar/vazirmatn).
+
+Released under the [MIT License](LICENSE). If this kit saves you time, a ⭐ helps others find it.

@@ -43,6 +43,20 @@
         font-feature-settings: 'ss01';
     }
 
+    /* Vazirmatn renders every digit as a Persian digit; English pages use a Latin system stack instead. */
+    html:lang(en) {
+        font-family:
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            'Segoe UI',
+            Roboto,
+            'Helvetica Neue',
+            Arial,
+            sans-serif;
+        font-feature-settings: normal;
+    }
+
     /* Visible focus for keyboard users on every interactive element (a11y). */
     :focus-visible {
         @apply outline-2 outline-offset-2 outline-ring;
