@@ -1,47 +1,22 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# AGENTS.md
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+Instructions for AI coding agents (Cursor, Copilot, Codex, OpenCode, Gemini, …).
 
-## Prerequisites
+**The single source of truth is [`CLAUDE.md`](CLAUDE.md).** Read it first and follow it exactly —
+architecture, golden rules, commands, definition of done and the list of things you must never do.
 
-Verify that PHP and Composer are available:
+Then, depending on the task:
 
-```sh
-php -v
-composer -V
+- Conventions with good/bad examples: [`docs/conventions.md`](docs/conventions.md)
+- Architecture and module boundaries: [`docs/architecture.md`](docs/architecture.md), [`docs/adr/`](docs/adr)
+- Step-by-step recipes (they are tool-agnostic Markdown): [`.claude/skills/*/SKILL.md`](.claude/skills)
+- Role descriptions you can adopt (planner, builder, reviewer, …): [`.claude/agents/*.md`](.claude/agents)
+- Generic Laravel guidance (Laravel Boost): [`docs/ai/laravel-boost.md`](docs/ai/laravel-boost.md) — `CLAUDE.md` wins on conflicts.
+
+Before you say you are done, run:
+
+```bash
+composer check
 ```
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
-
-macOS:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
-```
-
-Windows PowerShell:
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
-```
-
-Linux:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
-
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
-
-## Agent Setup
-
-Install Laravel Boost from the application root before making application changes:
-
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
-
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+It must pass. Do not weaken rules, skip tests or add PHPStan ignores to make it pass.
