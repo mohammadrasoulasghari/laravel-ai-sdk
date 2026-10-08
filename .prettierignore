@@ -1,0 +1,9 @@
+vendor
+node_modules
+public
+storage
+bootstrap/cache
+resources/views/vendor
+resources/views/mail
+composer.lock
+package-lock.json

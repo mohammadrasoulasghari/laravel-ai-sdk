@@ -1,0 +1,17 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+# Level max on everything we author. Vendor-published config and framework
+# migrations are excluded (they are declarative and owned upstream) — ADR-0013.
+parameters:
+    level: max
+    paths:
+        - app
+        - bootstrap/app.php
+        - database/factories
+        - database/seeders
+        - routes
+    tmpDir: storage/framework/cache/phpstan
+    checkMissingCallableSignature: true
+    checkUninitializedProperties: true
+    reportUnmatchedIgnoredErrors: true

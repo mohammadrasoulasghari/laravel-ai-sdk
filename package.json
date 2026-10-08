@@ -4,13 +4,20 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "format": "prettier --write --no-error-on-unmatched-pattern resources/views resources/js resources/css 'app/Modules/*/resources/**'",
+        "format:check": "prettier --check --no-error-on-unmatched-pattern resources/views resources/js resources/css 'app/Modules/*/resources/**'"
     },
     "devDependencies": {
+        "@prettier/plugin-php": "^0.25.0",
         "@tailwindcss/vite": "^4.0.0",
-        "concurrently": "^10.0.3",
+        "alpinejs": "^3.17.4",
         "laravel-vite-plugin": "^3.1",
+        "prettier": "^3.9.9",
+        "prettier-plugin-blade": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.8.1",
         "tailwindcss": "^4.0.0",
+        "vazirmatn": "^33.0.3",
         "vite": "^8.0.0"
     },
     "optionalDependencies": {

@@ -1,23 +1,47 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "acme/laravel-ai-starter",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "AI-first, modular Laravel starter kit (Blade, API, strict tooling).",
+    "keywords": [
+        "laravel",
+        "starter-kit",
+        "modular",
+        "ai-first"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "dedoc/scramble": "^0.13.47",
+        "hekmatinasser/verta": "^9.0",
         "laravel/framework": "^13.17",
-        "laravel/tinker": "^3.0"
+        "laravel/horizon": "^5.50",
+        "laravel/pennant": "^1.26",
+        "laravel/pulse": "^1.8",
+        "laravel/sanctum": "^4.3",
+        "laravel/tinker": "^3.0",
+        "spatie/laravel-permission": "^8.3"
     },
     "require-dev": {
+        "captainhook/captainhook": "^5.29",
+        "captainhook/hook-installer": "^1.0",
+        "driftingly/rector-laravel": "^2.6",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.13",
+        "laravel/boost": "^2.10",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.27",
+        "laravel/sail": "^1.68",
+        "laravel/telescope": "^5.25",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^12.5.12"
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.1",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
+        "phpunit/phpunit": "^12.5.12",
+        "rector/rector": "^2.7"
     },
     "autoload": {
         "psr-4": {
@@ -36,8 +60,8 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
-            "npm install --ignore-scripts",
+            "@php artisan migrate --seed --force",
+            "npm install",
             "npm run build"
         ],
         "dev": [
@@ -46,7 +70,7 @@
         ],
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",
-            "@php artisan test"
+            "pest --compact @additional_args"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -65,6 +89,34 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "lint": [
+            "pint --test",
+            "rector process --dry-run --no-progress-bar",
+            "npm run --silent format:check"
+        ],
+        "analyse": [
+            "phpstan analyse --no-progress --memory-limit=1G"
+        ],
+        "test:types": [
+            "pest --type-coverage --min=100 --compact"
+        ],
+        "test:coverage": [
+            "pest --coverage --min=80 --compact"
+        ],
+        "test:mutate": [
+            "pest --mutate --everything --covered-only --parallel --min=80"
+        ],
+        "fix": [
+            "rector process --no-progress-bar",
+            "pint",
+            "npm run --silent format"
+        ],
+        "check": [
+            "@lint",
+            "@analyse",
+            "@test",
+            "@test:types"
         ]
     },
     "extra": {
@@ -78,9 +130,22 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
+            "php-http/discovery": true,
+            "captainhook/hook-installer": true
+        },
+        "process-timeout": 900
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "setup": "Install dependencies, create .env, migrate and seed, build assets.",
+        "lint": "Check code style (Pint, Rector dry-run, Prettier) without changing files.",
+        "analyse": "Run Larastan/PHPStan at level max.",
+        "test": "Run the Pest test suite (unit, feature, arch).",
+        "test:types": "Require 100% type coverage.",
+        "test:coverage": "Run tests with line coverage (needs pcov or xdebug), min 80%.",
+        "test:mutate": "Mutation testing for covered Actions and Value Objects.",
+        "fix": "Apply Rector, Pint and Prettier fixes.",
+        "check": "Everything CI runs: lint + analyse + test + type coverage. Must be green before done."
+    }
 }
