@@ -11,8 +11,10 @@ use App\Modules\{{ module }}\Data\{{ data }};
  */
 final readonly class {{ class }}
 {
-    public function handle({{ data }} $data): void
+    public function handle({{ data }} $data): {{ data }}
     {
-        // Enforce business rules (throw a DomainException subclass), persist, dispatch events.
+        // Enforce business rules (throw a DomainException subclass), persist, dispatch events,
+        // then return what the caller needs — usually the created/updated model.
+        return $data;
     }
 }

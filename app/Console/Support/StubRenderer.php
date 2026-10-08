@@ -6,6 +6,7 @@ namespace App\Console\Support;
 
 use Illuminate\Filesystem\Filesystem;
 use RuntimeException;
+use Symfony\Component\Process\Process;
 
 /**
  * Renders stubs/starter/*.stub with {{ placeholder }} replacements and writes them,
@@ -46,6 +47,26 @@ final readonly class StubRenderer
         $this->files->ensureDirectoryExists(dirname($target));
         $this->files->put($target, $this->render($stub, $replacements));
 
+        if (str_ends_with($target, '.php') && ! str_ends_with($target, '.blade.php')) {
+            $this->format([$target]);
+        }
+
         return true;
+    }
+
+    /**
+     * Apply the project's Pint rules so generated code passes `composer lint` as-is.
+     *
+     * @param  list<string>  $paths
+     */
+    public function format(array $paths): void
+    {
+        $pint = base_path('vendor/bin/pint');
+
+        if ($paths === [] || ! $this->files->exists($pint)) {
+            return;
+        }
+
+        (new Process([PHP_BINARY, $pint, '--quiet', ...$paths], base_path()))->run();
     }
 }

@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace App\Modules\{{ module }}\Queries;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
+use LogicException;
 
 /**
  * {{ description }}
  */
 final readonly class {{ class }}
 {
-    /** @return LengthAwarePaginator<int, \Illuminate\Database\Eloquent\Model> */
+    /** @return LengthAwarePaginator<int, Model> */
     public function handle(int $perPage = 15): LengthAwarePaginator
     {
         // return Model::query()->with([...])->latest()->paginate($perPage)->withQueryString();
-        throw new \LogicException('Implement '.self::class.'::handle().');
+        throw new LogicException(sprintf('Implement %s::handle() (per page: %d).', self::class, $perPage));
     }
 }

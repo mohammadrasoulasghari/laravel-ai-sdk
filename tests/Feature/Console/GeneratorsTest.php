@@ -47,7 +47,7 @@ it('generates an action with its DTO and test', function (): void {
 
     $action = (string) file_get_contents(app_path('Modules/'.PROBE.'/Actions/ArchiveThing.php'));
 
-    expect($action)->toContain('final readonly class ArchiveThing')->toContain('public function handle(ArchiveThingData $data): void')
+    expect($action)->toContain('final readonly class ArchiveThing')->toContain('public function handle(ArchiveThingData $data): ArchiveThingData')
         ->and(app_path('Modules/'.PROBE.'/Data/ArchiveThingData.php'))->toBeFile()
         ->and(base_path('tests/Feature/Modules/'.PROBE.'/Actions/ArchiveThingTest.php'))->toBeFile();
 

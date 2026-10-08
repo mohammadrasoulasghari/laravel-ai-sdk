@@ -8,7 +8,7 @@ use App\Modules\{{ module }}\Data\{{ data }};
 it('{{ sentence }}', function (): void {
     $action = resolve({{ class }}::class);
 
-    $action->handle(new {{ data }}());
+    $action->handle(new {{ data }}(name: 'example'));
 
     expect(true)->toBeTrue(); // TODO: assert the state change / event / return value
 })->todo();

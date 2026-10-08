@@ -39,7 +39,7 @@ final class MakeModuleCommand extends Command
             $files->put($module->path($dir.'/.gitkeep'), '');
         }
 
-        $this->registerProvider($files, $module);
+        $this->registerProvider($files, $stubs, $module);
 
         $this->components->info("Module [{$module->studly}] created in app/Modules/{$module->studly}.");
         $this->components->bulletList([
@@ -52,7 +52,7 @@ final class MakeModuleCommand extends Command
         return self::SUCCESS;
     }
 
-    private function registerProvider(Filesystem $files, ModuleName $module): void
+    private function registerProvider(Filesystem $files, StubRenderer $stubs, ModuleName $module): void
     {
         $path = base_path('bootstrap/providers.php');
         $contents = $files->get($path);
@@ -64,5 +64,6 @@ final class MakeModuleCommand extends Command
 
         $contents = (string) preg_replace('/(\n\s*\/\/ modules\n)/', "$1    \\{$class}::class,\n", $contents, 1);
         $files->put($path, $contents);
+        $stubs->format([$path]);
     }
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\{{ module }}\Data;
 
+/** Immutable input/output data. Replace the placeholder property with the real fields. */
 final readonly class {{ class }}
 {
     public function __construct(
-        // public string $name,
+        public string $name,
     ) {}
 }
