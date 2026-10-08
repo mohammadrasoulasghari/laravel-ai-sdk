@@ -29,6 +29,11 @@ final class TooManyLoginAttemptsException extends DomainException
         return ['seconds' => $this->retryAfterSeconds];
     }
 
+    public function headers(): array
+    {
+        return ['Retry-After' => (string) $this->retryAfterSeconds];
+    }
+
     public function status(): int
     {
         return Response::HTTP_TOO_MANY_REQUESTS;

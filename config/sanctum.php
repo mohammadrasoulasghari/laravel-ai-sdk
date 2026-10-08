@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => in_array(env('SANCTUM_TOKEN_EXPIRATION'), [null, ''], true) ? 43200 : (int) env('SANCTUM_TOKEN_EXPIRATION'),
 
     /*
     |--------------------------------------------------------------------------

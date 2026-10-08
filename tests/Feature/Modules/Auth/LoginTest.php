@@ -197,3 +197,15 @@ it('redirects authenticated users away from guest pages', function (string $rout
 it('redirects guests to the login page', function (string $uri): void {
     $this->get($uri)->assertRedirect(route('login'));
 })->with(['/dashboard', '/verify-email', '/admin', '/admin/users', '/admin/roles', '/admin/settings']);
+
+it('sends Retry-After with API lockouts', function (): void {
+    $user = User::factory()->create(['password' => 'password']);
+
+    foreach (range(1, AuthenticateUser::MAX_ATTEMPTS) as $i) {
+        $this->postJson('/api/v1/auth/tokens', ['email' => $user->email, 'password' => 'wrong', 'device_name' => 'x']);
+    }
+
+    $this->postJson('/api/v1/auth/tokens', ['email' => $user->email, 'password' => 'wrong', 'device_name' => 'x'])
+        ->assertStatus(429)
+        ->assertHeader('Retry-After');
+});

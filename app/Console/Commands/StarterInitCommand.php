@@ -46,6 +46,18 @@ final class StarterInitCommand extends Command
         $freshGit = $this->option('fresh-git') === true
             || (! $this->option('no-interaction') && $this->input->isInteractive() && confirm('Reset git history?', default: false));
 
+        if (preg_match('/^[^"\\\\\x00-\x1F\x7F]{1,80}$/u', $name) !== 1) {
+            $this->components->error('Project name must be 1–80 characters without quotes, backslashes or control characters.');
+
+            return self::FAILURE;
+        }
+
+        if (filter_var($url, FILTER_VALIDATE_URL) === false || preg_match('#^https?://#', $url) !== 1) {
+            $this->components->error("Invalid URL [{$url}]. Use http(s)://host[:port].");
+
+            return self::FAILURE;
+        }
+
         if (preg_match('#^[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*$#', $package) !== 1) {
             $this->components->error("Invalid Composer package name [{$package}]. Use lowercase vendor/name.");
 

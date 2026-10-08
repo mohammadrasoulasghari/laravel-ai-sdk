@@ -5,6 +5,7 @@ includes:
 # migrations are excluded (they are declarative and owned upstream) — ADR-0013.
 parameters:
     level: max
+    phpVersion: 80300
     paths:
         - app
         - bootstrap/app.php

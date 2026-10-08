@@ -24,7 +24,7 @@ final class MakeActionCommand extends Command
         $module = new ModuleName($this->argument('module'));
         $action = new ModuleName($this->argument('name'));
         $option = $this->option('data');
-        $data = is_string($option) && $option !== '' ? $option : $action->studly.'Data';
+        $data = is_string($option) && $option !== '' ? (new ModuleName($option))->studly : $action->studly.'Data';
 
         if (str_ends_with($action->studly, 'Action')) {
             $this->components->error('Action names have no "Action" suffix (conventions §2).');
@@ -41,6 +41,12 @@ final class MakeActionCommand extends Command
         ];
 
         $withoutData = $this->option('no-data') === true;
+
+        if (is_file($module->path("Actions/{$action->studly}.php"))) {
+            $this->components->error("Action [{$action->studly}] already exists.");
+
+            return self::FAILURE;
+        }
 
         $created = $stubs->write($withoutData ? 'action-no-data' : 'action', $module->path("Actions/{$action->studly}.php"), $replacements);
 

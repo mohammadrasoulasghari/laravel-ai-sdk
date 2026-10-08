@@ -171,7 +171,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => in_array(env('SESSION_SECURE_COOKIE'), [null, ''], true) ? env('APP_ENV') === 'production' : (bool) env('SESSION_SECURE_COOKIE'),
 
     /*
     |--------------------------------------------------------------------------

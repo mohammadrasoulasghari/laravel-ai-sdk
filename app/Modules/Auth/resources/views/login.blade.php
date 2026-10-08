@@ -29,9 +29,16 @@
 
         <x-ui.button type="submit" class="w-full">{{ __('auth::auth.login') }}</x-ui.button>
 
-        <p class="text-center text-sm text-fg-muted">
-            {{ __('auth::auth.no_account') }}
-            <a href="{{ route('register') }}" class="text-primary hover:underline">{{ __('auth::auth.register') }}</a>
-        </p>
+        @if ($registrationOpen)
+            <p class="text-center text-sm text-fg-muted">
+                {{ __('auth::auth.no_account') }}
+                <a
+                    href="{{ route('register') }}"
+                    class="text-primary hover:underline"
+                    >{{ __('auth::auth.register') }}</a
+                >
+            </p>
+
+        @endif
     </form>
 </x-layouts.guest>

@@ -9,8 +9,15 @@ return [
     // Seeded super-admin (DatabaseSeeder). Change before seeding a shared environment.
     'admin' => [
         'email' => env('ADMIN_EMAIL', 'admin@example.com'),
-        'password' => env('ADMIN_PASSWORD', 'password'),
+        'password' => env('ADMIN_PASSWORD') ?: (env('APP_ENV') === 'local' ? 'password' : null),
     ],
+
+    // TrustProxies: null (none), '*' (all — only behind a private LB), or a list of IPs/CIDRs.
+    'trusted_proxies' => match ($proxies = env('TRUSTED_PROXIES')) {
+        null, '' => null,
+        '*' => '*',
+        default => array_map(trim(...), explode(',', (string) $proxies)),
+    },
 
     // Requests per minute for named rate limiters (defined in each module provider's bootModule()).
     'rate_limits' => [

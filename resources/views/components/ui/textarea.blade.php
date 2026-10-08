@@ -14,7 +14,8 @@
         id="{{ $id }}"
         name="{{ $name }}"
         rows="{{ $rows }}"
-        @if ($invalid) aria-invalid="true" aria-describedby="{{ $name }}-error" @endif
+        @if ($invalid) aria-invalid="true" @endif
+        @if ($hint || $invalid) aria-describedby="{{ trim(($hint ? $id.'-hint ' : '').($invalid ? $name.'-error' : '')) }}" @endif
         {{
             $attributes
                 ->except('class')
@@ -28,7 +29,7 @@
     >
 
     @if ($hint)
-        <p class="mt-1.5 text-sm text-fg-muted">{{ $hint }}</p>
+        <p id="{{ $id }}-hint" class="mt-1.5 text-sm text-fg-muted">{{ $hint }}</p>
     @endif
 
     <x-ui.form-error :name="$name" />

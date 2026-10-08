@@ -10,7 +10,10 @@ use App\Modules\Blog\Enums\PostStatus;
 use App\Modules\Blog\Models\Category;
 use App\Modules\Blog\Models\Post;
 use App\Modules\Blog\ValueObjects\Slug;
+use App\Modules\Users\Actions\DeleteUser;
 use App\Modules\Users\Models\User;
+
+use function Tests\userWithRole;
 
 describe('CreatePost', function (): void {
     it('creates a draft owned by the author', function (): void {
@@ -122,4 +125,15 @@ it('deletes a post', function (): void {
     resolve(DeletePost::class)->handle($post);
 
     $this->assertModelMissing($post);
+});
+
+it('keeps posts when their author is deleted', function (): void {
+    $post = Post::factory()->published()->create();
+    $admin = userWithRole('super-admin');
+
+    resolve(DeleteUser::class)->handle($post->author, $admin);
+
+    expect($post->refresh()->author_id)->toBeNull();
+
+    $this->get(route('blog.posts.show', $post->slug->value))->assertOk()->assertSee(__('blog::posts.former_member'));
 });

@@ -303,3 +303,35 @@ it('lets super admins manage users without explicit permissions', function (): v
 
     $this->assertModelMissing($member);
 });
+
+it('does not let an admin grant themselves the super-admin role', function (): void {
+    $admin = userWithRole('admin');
+
+    $this->actingAs($admin)
+        ->put(route('admin.users.update', $admin), ['name' => $admin->name, 'email' => $admin->email, 'roles' => ['super-admin']])
+        ->assertSessionHasErrors('roles.0');
+
+    expect($admin->refresh()->hasRole('super-admin'))->toBeFalse();
+});
+
+it('does not let an admin edit or delete a super admin', function (): void {
+    $admin = userWithRole('admin');
+    $root = userWithRole('super-admin');
+
+    $this->actingAs($admin)->get(route('admin.users.edit', $root))->assertForbidden();
+    $this->actingAs($admin)->put(route('admin.users.update', $root), ['name' => 'x', 'email' => 'evil@example.com', 'roles' => []])->assertForbidden();
+    $this->actingAs($admin)->delete(route('admin.users.destroy', $root))->assertForbidden();
+
+    expect($root->refresh()->email)->not->toBe('evil@example.com');
+});
+
+it('lets a super admin grant the super-admin role', function (): void {
+    $root = userWithRole('super-admin');
+    $user = userWithRole('member');
+
+    $this->actingAs($root)
+        ->put(route('admin.users.update', $user), ['name' => $user->name, 'email' => $user->email, 'roles' => ['super-admin']])
+        ->assertRedirect();
+
+    expect($user->refresh()->hasRole('super-admin'))->toBeTrue();
+});

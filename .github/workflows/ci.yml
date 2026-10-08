@@ -99,6 +99,11 @@ jobs:
           php-version: '8.3'
           coverage: pcov
           tools: composer:v2
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
       - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: npm ci && npm run build
       - run: cp .env.example .env && php artisan key:generate
       - run: composer test:mutate

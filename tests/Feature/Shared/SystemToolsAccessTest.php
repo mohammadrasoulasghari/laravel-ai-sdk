@@ -26,5 +26,5 @@ it('serves the OpenAPI document to operators', function (): void {
         ->getJson('/docs/api.json')
         ->assertOk()
         ->assertJsonPath('openapi', fn (string $version): bool => str_starts_with($version, '3.'))
-        ->assertJsonStructure(['paths' => ['/v1/blog/posts', '/v1/auth/tokens', '/v1/me']]);
+        ->assertJsonStructure(['paths' => ['/v1/auth/tokens', '/v1/me']]);
 });

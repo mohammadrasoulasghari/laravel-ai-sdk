@@ -128,3 +128,10 @@ it('allows registration again once reopened', function (): void {
 
     $this->assertAuthenticated();
 });
+
+it('redirects the register page to login when registration is closed', function (): void {
+    resolve(UpdateSettings::class)->handle(new SettingsData(['registration_open' => false]));
+
+    $this->get(route('register'))->assertRedirect(route('login'));
+    $this->get(route('login'))->assertDontSee('href="'.route('register').'"', false);
+});

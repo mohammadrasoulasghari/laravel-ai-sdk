@@ -24,7 +24,7 @@ final class PostResource extends JsonResource
             'status' => $this->status->value,
             'published_at' => $this->published_at?->toIso8601String(),
             'category' => new CategoryResource($this->whenLoaded('category')),
-            'author' => $this->whenLoaded('author', fn (): array => ['id' => $this->author->id, 'name' => $this->author->name]),
+            'author' => $this->whenLoaded('author', fn (): ?array => $this->author === null ? null : ['id' => $this->author->id, 'name' => $this->author->name]),
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
         ];

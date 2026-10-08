@@ -11,7 +11,7 @@
             <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-fg-muted">
                 <span>{{
                     __('blog::posts.by_author', [
-                        'name' => $post->author->name,
+                        'name' => $post->author?->name ?? __('blog::posts.former_member'),
                     ])
                 }}</span>
                 <x-ui.date :value="$post->published_at" />

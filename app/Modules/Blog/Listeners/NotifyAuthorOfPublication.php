@@ -35,7 +35,7 @@ final class NotifyAuthorOfPublication implements ShouldQueueAfterCommit
     {
         $post = Post::query()->with('author')->find($event->postId);
 
-        if ($post === null || $post->status !== PostStatus::Published || $post->published_at?->isFuture() !== false) {
+        if ($post === null || $post->author === null || $post->status !== PostStatus::Published || $post->published_at?->isFuture() !== false) {
             return;
         }
 

@@ -25,7 +25,7 @@ use Illuminate\Support\Str;
 /**
  * @property-read string $id
  * @property string $category_id
- * @property string $author_id
+ * @property string|null $author_id
  * @property string $title
  * @property Slug $slug
  * @property string|null $excerpt
@@ -37,7 +37,7 @@ use Illuminate\Support\Str;
  * @property-read string $body_html
  * @property-read int $reading_minutes
  * @property-read Category $category
- * @property-read User $author
+ * @property-read User|null $author
  */
 #[Table('blog_posts')]
 #[Fillable(['category_id', 'author_id', 'title', 'slug', 'excerpt', 'body'])]
@@ -80,7 +80,7 @@ final class Post extends Model
         return Attribute::get(fn (): string => Str::markdown($this->body, [
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
-        ]));
+        ]))->shouldCache();
     }
 
     /**
@@ -90,7 +90,7 @@ final class Post extends Model
      */
     protected function readingMinutes(): Attribute
     {
-        return Attribute::get(fn (): int => max(1, (int) ceil(str_word_count(strip_tags($this->body_html), 0, 'آ-ی') / 200)));
+        return Attribute::get(fn (): int => max(1, (int) ceil(count(preg_split('/\s+/u', mb_trim(strip_tags($this->body_html)), -1, PREG_SPLIT_NO_EMPTY) ?: []) / 200)));
     }
 
     /** @return array<string, string> */

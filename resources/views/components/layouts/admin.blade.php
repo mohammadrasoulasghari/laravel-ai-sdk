@@ -14,11 +14,29 @@
 
         <div class="flex min-w-0 flex-1 flex-col">
             <header class="flex h-16 items-center justify-between gap-4 border-b border-border bg-surface px-6">
-                <a
-                    href="{{ route('home') }}"
-                    class="text-sm text-fg-muted hover:text-fg"
-                    >{{ __('ui.back_to_site') }}</a
-                >
+                <div class="flex items-center gap-3">
+                    <details class="relative md:hidden">
+                        <summary
+                            class="[&::-webkit-details-marker]:hidden list-none rounded-control p-2 text-fg-muted hover:bg-surface-muted"
+                        >
+                            <span class="sr-only">{{ __('ui.open_menu') }}</span>
+                            <x-ui.icon name="menu" class="size-5" />
+                        </summary>
+                        <nav
+                            aria-label="{{ __('ui.admin_navigation') }}"
+                            class="absolute start-0 z-40 mt-2 flex w-60 flex-col gap-1 rounded-card border border-border bg-surface p-2 shadow-lg"
+                        >
+                            @foreach ($adminNavigation as $item)
+                                <x-ui.nav-link :item="$item" />
+                            @endforeach
+                        </nav>
+                    </details>
+                    <a
+                        href="{{ route('home') }}"
+                        class="text-sm text-fg-muted hover:text-fg"
+                        >{{ __('ui.back_to_site') }}</a
+                    >
+                </div>
                 <div class="flex items-center gap-2">
                     <x-ui.locale-switcher :locales="$locales" :current="$currentLocale" />
                     <x-ui.theme-toggle />

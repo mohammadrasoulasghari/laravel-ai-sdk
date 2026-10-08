@@ -16,10 +16,12 @@ if ! arch="$(vendor/bin/pest --testsuite=Arch --compact 2>&1)"; then
   exit 2
 fi
 
-app_files="$(printf '%s\n' "$changed" | grep -E '^(app|routes)/' | while read -r f; do [ -f "$f" ] && echo "$f"; done || true)"
-if [ -n "$app_files" ]; then
-  # shellcheck disable=SC2086
-  if ! stan="$(vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=raw $app_files 2>&1)"; then
+app_files=()
+while IFS= read -r f; do
+  [[ "$f" =~ ^(app|routes)/[A-Za-z0-9_./-]+\.php$ && -f "$f" ]] && app_files+=("$f")
+done <<< "$changed"
+if [ "${#app_files[@]}" -gt 0 ]; then
+  if ! stan="$(vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=raw -- "${app_files[@]}" 2>&1)"; then
     printf 'PHPStan fails on changed files — fix before finishing:\n%s\n' "$(printf '%s' "$stan" | tail -40)" >&2
     exit 2
   fi

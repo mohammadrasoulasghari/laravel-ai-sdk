@@ -13,7 +13,7 @@ final readonly class PostPublished
 
     public function __construct(
         public string $postId,
-        public string $authorId,
+        public ?string $authorId,
         /** ISO-8601; in the future for scheduled posts. */
         public string $publishedAt,
     ) {}

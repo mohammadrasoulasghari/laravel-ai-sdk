@@ -16,7 +16,7 @@ it('issues a personal access token', function (): void {
     ])
         ->assertCreated()
         ->assertJsonPath('data.token_type', 'Bearer')
-        ->assertJsonPath('data.expires_at', null)
+        ->assertJsonPath('data.expires_at', fn (?string $value): bool => $value !== null)
         ->assertJsonStructure(['data' => ['token', 'token_type', 'expires_at']]);
 
     $plain = $response->json('data.token');
@@ -111,4 +111,12 @@ it('requires a token to revoke', function (): void {
     $this->deleteJson('/api/v1/auth/tokens/current')
         ->assertUnauthorized()
         ->assertHeader('Content-Type', 'application/problem+json');
+});
+
+it('issues tokens that expire by default', function (): void {
+    $user = User::factory()->create(['password' => 'password']);
+
+    $this->postJson('/api/v1/auth/tokens', ['email' => $user->email, 'password' => 'password', 'device_name' => 'cli'])
+        ->assertCreated()
+        ->assertJsonPath('data.expires_at', fn (?string $value): bool => $value !== null);
 });

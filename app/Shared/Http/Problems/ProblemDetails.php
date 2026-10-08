@@ -27,6 +27,8 @@ final readonly class ProblemDetails implements Responsable
         public string $type = 'about:blank',
         public ?string $instance = null,
         public array $extensions = [],
+        /** @var array<string, string> HTTP headers to send (e.g. Retry-After, Allow). */
+        public array $headers = [],
     ) {}
 
     /** @return array<string, mixed> */
@@ -48,7 +50,7 @@ final readonly class ProblemDetails implements Responsable
         return new JsonResponse(
             data: $this->toArray(),
             status: $this->status,
-            headers: ['Content-Type' => self::CONTENT_TYPE],
+            headers: [...$this->headers, 'Content-Type' => self::CONTENT_TYPE],
             options: JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
         );
     }

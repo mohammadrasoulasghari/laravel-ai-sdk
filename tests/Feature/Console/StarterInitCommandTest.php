@@ -88,3 +88,18 @@ it('rejects an invalid package name', function (): void {
         '--no-interaction' => true,
     ])->assertFailed();
 });
+
+it('rejects names and URLs that could inject into .env', function (string $name, string $url): void {
+    $this->artisan('starter:init', [
+        '--name' => $name,
+        '--package' => 'acme/app',
+        '--url' => $url,
+        '--path' => $this->root,
+        '--no-interaction' => true,
+    ])->assertFailed();
+})->with([
+    'newline in name' => ["Acme\nAPP_DEBUG=true", 'http://localhost'],
+    'quote in name' => ['Acme" X', 'http://localhost'],
+    'invalid url' => ['Acme', 'not a url'],
+    'javascript url' => ['Acme', 'javascript:alert(1)'],
+]);

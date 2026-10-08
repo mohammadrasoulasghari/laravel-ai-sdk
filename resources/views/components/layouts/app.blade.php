@@ -15,6 +15,25 @@
             </div>
 
             <div class="flex items-center gap-2">
+                @if ($appNavigation !== [])
+                    <details class="relative md:hidden">
+                        <summary
+                            class="[&::-webkit-details-marker]:hidden list-none rounded-control p-2 text-fg-muted hover:bg-surface-muted"
+                        >
+                            <span class="sr-only">{{ __('ui.open_menu') }}</span>
+                            <x-ui.icon name="menu" class="size-5" />
+                        </summary>
+                        <nav
+                            aria-label="{{ __('ui.main_navigation') }}"
+                            class="absolute end-0 z-40 mt-2 flex w-56 flex-col gap-1 rounded-card border border-border bg-surface p-2 shadow-lg"
+                        >
+                            @foreach ($appNavigation as $item)
+                                <x-ui.nav-link :item="$item" />
+                            @endforeach
+                        </nav>
+                    </details>
+                @endif
+
                 <x-ui.locale-switcher :locales="$locales" :current="$currentLocale" />
                 <x-ui.theme-toggle />
 

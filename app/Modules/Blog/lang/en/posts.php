@@ -14,6 +14,7 @@ return [
     'by_author' => 'By :name',
     'read_more' => 'Read more',
     'reading_time' => '{1} :minutes min read|[2,*] :minutes min read',
+    'former_member' => 'former member',
     'back_to_blog' => 'Back to blog',
     'search_placeholder' => 'Search posts',
     'empty' => 'No posts yet.',

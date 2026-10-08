@@ -28,6 +28,12 @@ abstract class DomainException extends RuntimeException
         return [];
     }
 
+    /** @return array<string, string> Extra response headers, e.g. ['Retry-After' => '60']. */
+    public function headers(): array
+    {
+        return [];
+    }
+
     public function status(): int
     {
         return Response::HTTP_UNPROCESSABLE_ENTITY;

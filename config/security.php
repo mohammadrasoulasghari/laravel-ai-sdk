@@ -13,5 +13,5 @@ return [
     'csp_report_only' => (bool) env('SECURITY_CSP_REPORT_ONLY', false),
 
     // Vite dev server origin allowed by CSP while running `npm run dev`.
-    'vite_dev_server' => env('SECURITY_VITE_DEV_SERVER', env('APP_ENV') === 'local' ? 'http://localhost:5173' : ''),
+    'vite_dev_server' => env('SECURITY_VITE_DEV_SERVER') ?: (env('APP_ENV') === 'local' ? 'http://localhost:5173' : ''),
 ];

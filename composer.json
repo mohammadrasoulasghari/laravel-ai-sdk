@@ -46,7 +46,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
     },
@@ -87,9 +86,9 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php artisan starter:init"
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
@@ -139,7 +138,10 @@
             "php-http/discovery": true,
             "captainhook/hook-installer": true
         },
-        "process-timeout": 900
+        "process-timeout": 900,
+        "platform": {
+            "php": "8.3.0"
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -153,5 +155,11 @@
         "test:mutate": "Mutation testing for covered Actions and Value Objects.",
         "fix": "Apply Rector, Pint and Prettier fixes.",
         "check": "Everything CI runs: lint + analyse + test + type coverage. Must be green before done."
-    }
+    },
+    "homepage": "https://github.com/your-org/laravel-ai-starter",
+    "authors": [
+        {
+            "name": "Laravel AI-First Starter Kit contributors"
+        }
+    ]
 }

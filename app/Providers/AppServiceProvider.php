@@ -7,9 +7,12 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
@@ -49,6 +52,21 @@ final class AppServiceProvider extends ServiceProvider
             : Password::min(8));
 
         Vite::useAggressivePrefetching();
+
+        // Escape Markdown syntax inside mail notification text (prevents link injection
+        // through user-supplied titles/messages in MailMessage::line()).
+        Markdown::withSecuredEncoding();
+
+        if ($production && config()->boolean('app.debug')) {
+            Log::critical('APP_DEBUG is enabled in production: stack traces and environment details are exposed.');
+        }
+
+        // Behind a load balancer / TLS proxy set TRUSTED_PROXIES (comma list or "*") so
+        // request IPs (rate limits) and HTTPS detection (HSTS, secure cookies) are correct.
+        $proxies = config('starter.trusted_proxies');
+        if (is_string($proxies) || is_array($proxies)) {
+            TrustProxies::at($proxies);
+        }
 
         $this->configureRateLimiting();
     }

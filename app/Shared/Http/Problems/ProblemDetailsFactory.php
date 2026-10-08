@@ -57,12 +57,14 @@ final readonly class ProblemDetailsFactory
                 type: 'urn:problem:'.$exception->errorCode(),
                 instance: $instance,
                 extensions: $extensions,
+                headers: $exception->headers(),
             ),
             $exception instanceof HttpExceptionInterface => new ProblemDetails(
                 status: $exception->getStatusCode(),
                 title: $this->title($exception->getStatusCode()),
                 instance: $instance,
                 extensions: $extensions,
+                headers: $this->headers($exception->getHeaders()),
             ),
             default => new ProblemDetails(
                 status: Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -72,6 +74,23 @@ final readonly class ProblemDetailsFactory
                 extensions: $extensions,
             ),
         };
+    }
+
+    /**
+     * @param  array<mixed>  $headers
+     * @return array<string, string>
+     */
+    private function headers(array $headers): array
+    {
+        $result = [];
+
+        foreach ($headers as $name => $value) {
+            if (is_string($name) && is_scalar($value)) {
+                $result[$name] = (string) $value;
+            }
+        }
+
+        return $result;
     }
 
     private function title(int $status): string

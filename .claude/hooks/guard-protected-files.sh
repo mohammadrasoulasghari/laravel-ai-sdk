@@ -6,7 +6,10 @@ cd "$CLAUDE_PROJECT_DIR"
 
 file="$(php .claude/hooks/json-field.php tool_input.file_path)"
 [ -z "$file" ] && exit 0
-rel="${file#"$CLAUDE_PROJECT_DIR"/}"
+# Normalise ./ and ../ so "config/../.env" cannot slip past the checks.
+abs="$(realpath -m -- "$file")"
+root="$(realpath -m -- "$CLAUDE_PROJECT_DIR")"
+rel="${abs#"$root"/}"
 
 case "$rel" in
   .env|.env.*)
