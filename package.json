@@ -9,7 +9,7 @@
         "format:check": "prettier --check --no-error-on-unmatched-pattern 'resources/**/*.{blade.php,js,css}' 'app/Modules/*/resources/**/*.blade.php'"
     },
     "devDependencies": {
-        "@prettier/plugin-php": "^0.25.0",
+        "@prettier/plugin-php": "^0.26.0",
         "@tailwindcss/vite": "^4.0.0",
         "alpinejs": "^3.17.4",
         "laravel-vite-plugin": "^3.1",
